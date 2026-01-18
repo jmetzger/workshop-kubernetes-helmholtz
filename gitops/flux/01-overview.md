@@ -188,28 +188,3 @@ Optional/implizit:
 6. Flux sorgt dafür, dass der Cluster-Zustand wieder dem gewünschten Zustand entspricht
 
 ---
-
-### 4.2 Ablauf (als Mermaid Sequenzdiagramm)
-
-```mermaid
-sequenceDiagram
-  autonumber
-  participant U as User/GitOps Repo
-  participant SC as source-controller
-  participant HC as helm-controller
-  participant API as Kubernetes API
-
-  U->>API: apply HelmRepository + HelmRelease
-  API-->>SC: HelmRepository observed
-  SC->>SC: fetch index.yaml, compute revision
-  SC-->>API: update HelmRepository status (artifact/ref)
-
-  API-->>SC: HelmRelease references HelmRepository
-  SC->>SC: build/fetch HelmChart artifact (.tgz/oci)
-  SC-->>API: publish HelmChart artifact ref (digest/url)
-
-  API-->>HC: HelmRelease observed
-  HC->>SC: request chart artifact (ref)
-  HC->>HC: render templates with values
-  HC->>API: apply/upgrade resources (as Helm)
-  HC-->>API: update HelmRelease status (Ready/NotReady)
