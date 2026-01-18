@@ -118,6 +118,9 @@
      * [Pod with unprivilged user](kubectl-examples/16-run-pod-as-unprivileged-user.md)
      * [Pod ohne capabilities starten. Funktioniert !](kubectl-examples/16-run-pod-with-no-capabilities.md)
 
+  1. ResourceQuota / LimitRange
+     * [ResourceQuota - Ressourcen pro Namespace begrenzen](kubectl-examples/20-resourcequota.md)
+
   1. Helm (Kubernetes Paketmanager)
      * [Helm - Was kann Helm](helm/was-kann-helm.md)
      * [Helm Grundlagen](/helm/grundlagen.md)
