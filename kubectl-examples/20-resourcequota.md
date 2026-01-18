@@ -8,13 +8,13 @@
 | **Object Count** | `pods`, `services`, `configmaps`, `secrets`, `persistentvolumeclaims` |
 | **Storage** | `requests.storage`, `<storageclass>.storageclass.storage.k8s.io/requests.storage` |
 
-**Wichtig:** Wenn eine ResourceQuota für CPU/Memory existiert, MUESSEN alle Pods diese Werte angeben!
+**Wichtig:** Wenn eine ResourceQuota fuer CPU/Memory existiert, MUESSEN alle Pods diese Werte angeben!
 
 ## Schritt 1: Namespace erstellen
 
 ```
 # Ersetze <dein-name> mit deinem Namen (z.B. hans, petra, etc.)
-kubectl create namespace yournamespace
+kubectl create namespace resource-<dein-name>
 ```
 
 ## Schritt 2: ResourceQuota anlegen
@@ -33,7 +33,6 @@ apiVersion: v1
 kind: ResourceQuota
 metadata:
   name: my-quota
-  namespace: yournamespace
 spec:
   hard:
     requests.cpu: "500m"
@@ -46,13 +45,13 @@ spec:
 ```
 
 ```
-kubectl apply -f 01-resourcequota.yml
+kubectl apply -f . -n resource-<dein-name>
 ```
 
 ## Schritt 3: Quota pruefen
 
 ```
-kubectl describe resourcequota my-quota -n yournamespace
+kubectl describe resourcequota my-quota -n resource-<dein-name>
 ```
 
 Ausgabe zeigt Used vs Hard:
@@ -74,7 +73,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod1
-  namespace: yournamespace
 spec:
   containers:
   - name: nginx
@@ -89,13 +87,13 @@ spec:
 ```
 
 ```
-kubectl apply -f 02-pod1.yml
+kubectl apply -f . -n resource-<dein-name>
 ```
 
 ## Schritt 5: Quota-Verbrauch pruefen
 
 ```
-kubectl describe resourcequota my-quota -n yournamespace
+kubectl describe resourcequota my-quota -n resource-<dein-name>
 ```
 
 Jetzt sollte Used aktualisiert sein (z.B. pods: 1, requests.cpu: 100m, etc.)
@@ -110,7 +108,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod2
-  namespace: yournamespace
 spec:
   containers:
   - name: nginx
@@ -130,7 +127,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod3
-  namespace: yournamespace
 spec:
   containers:
   - name: nginx
@@ -145,7 +141,7 @@ spec:
 ```
 
 ```
-kubectl apply -f .
+kubectl apply -f . -n resource-<dein-name>
 ```
 
 Versuche nun einen 4. Pod:
@@ -156,7 +152,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod4
-  namespace: yournamespace
 spec:
   containers:
   - name: nginx
@@ -171,7 +166,7 @@ spec:
 ```
 
 ```
-kubectl apply -f 05-pod4.yml
+kubectl apply -f . -n resource-<dein-name>
 ```
 
 **Erwarteter Fehler:**
@@ -184,7 +179,7 @@ Error from server (Forbidden): pods "pod4" is forbidden: exceeded quota: my-quot
 Loesche zuerst die Pods:
 
 ```
-kubectl delete pod pod1 pod2 pod3 -n yournamespace
+kubectl delete pod pod1 pod2 pod3 -n resource-<dein-name>
 ```
 
 Versuche einen Pod mit zu viel Memory:
@@ -195,7 +190,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod-big
-  namespace: yournamespace
 spec:
   containers:
   - name: nginx
@@ -210,7 +204,7 @@ spec:
 ```
 
 ```
-kubectl apply -f 06-pod-big.yml
+kubectl apply -f 06-pod-big.yml -n resource-<dein-name>
 ```
 
 **Erwarteter Fehler:**
@@ -226,7 +220,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod-no-resources
-  namespace: yournamespace
 spec:
   containers:
   - name: nginx
@@ -234,7 +227,7 @@ spec:
 ```
 
 ```
-kubectl apply -f 07-pod-no-resources.yml
+kubectl apply -f 07-pod-no-resources.yml -n resource-<dein-name>
 ```
 
 **Erwarteter Fehler:**
@@ -242,10 +235,10 @@ kubectl apply -f 07-pod-no-resources.yml
 Error from server (Forbidden): must specify limits.cpu, limits.memory, requests.cpu, requests.memory
 ```
 
-## Aufraumen
+## Aufraeumen
 
 ```
-kubectl delete namespace yournamespace
+kubectl delete namespace resource-<dein-name>
 ```
 
 ## Zusammenfassung
