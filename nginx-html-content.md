@@ -45,7 +45,7 @@ docker rmi dockertrainereu/jm1-hello-web
 
 ```
 
-## Schritt 3: dokcer laufen lassen
+## Schritt 3: docker laufen lassen
 
 ```
 # und direkt aus der Registry wieder runterladen 
