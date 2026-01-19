@@ -48,6 +48,13 @@ docker rmi dockertrainereu/<dein-namenskuerzel>-hello-web
 ## Schritt 3: docker laufen lassen
 
 ```
+# sicherstellen, dass kein Alter container mit dem läuft
+docker container ls -a | grep hello-web
+# ansonsten
+docker rm -f hello-web
+```
+
+```
 # und direkt aus der Registry wieder runterladen 
 docker run --name hello-web -p 8080:80 -d dockertrainereu/jm1-hello-web
 
