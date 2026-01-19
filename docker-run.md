@@ -35,5 +35,7 @@ docker exec -it log-nginx bash
 ```
 
 ```
-cd /var/logs/nginx
+cd /var/log/nginx
+# alles auf /dev/stdout und /dev/stderr 
+ls -la 
 ```
