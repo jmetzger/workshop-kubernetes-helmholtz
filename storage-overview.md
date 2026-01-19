@@ -8,13 +8,11 @@ volumes
 tmpfs 
 ```
 
-## Disadvantags 
+## Holzauge sei wachsam, geht nicht in Kubernetes. 
 
 ```
 stored only on one node
 Does not work well in cluster
-
-
 ```
 
 ## Alternative for cluster 
@@ -26,6 +24,4 @@ nfs
 
 # Stichwort
 ReadWriteMany 
-
-
 ```
