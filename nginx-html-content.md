@@ -59,8 +59,7 @@ docker rm -f hello-web
 docker run --name hello-web -p 8081:80 -d dockertrainereu/<dein-namenskuerzel>-hello-web
 
 # laufenden Container anzeigen lassen
-docker container ls 
-# oder alt: deprecated 
+docker container ls  
 docker ps 
 
 curl http://localhost:8081 
