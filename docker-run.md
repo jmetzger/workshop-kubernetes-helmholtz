@@ -4,8 +4,8 @@
 
 ```
 # optional, docker run does the same 
-docker pull ubuntu
-docker run -t -d --name my-newubuntu ubuntu:xenial
+docker pull ubuntu:resolute # resolute ist 26.04 
+docker run -t -d --name my-newubuntu ubuntu:resolute
 # will wollen überprüfen, ob der container läuft
 docker container ls 
 # image vorhanden 
