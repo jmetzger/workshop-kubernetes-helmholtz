@@ -16,14 +16,20 @@ docker run -it --name=container-test-vol --mount target=/test_data,source=test-v
 ```
 
 ```
-1234ad# touch /test_data/README 
+# in der bash 
+touch /test_data/README 
 exit
 # stops container 
+```
 
+```
 # create new container and check for /test_data/README 
 docker run -it --name=container-test-vol2 --mount target=/test_data,source=test-vol ubuntu bash
 ```
-ab45# ls -la /test_data/README
+
+```
+# In der bash 
+ls -la /test_data/README
 exit
 ```
 
