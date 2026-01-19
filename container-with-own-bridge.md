@@ -29,3 +29,14 @@ docker network disconnect demo_net nginx1
 docker network inspect demo_net
 
 ```
+
+## Schritt 2: anpingen von neuem Container 
+
+```
+docker run -it --rm busybox
+```
+
+```
+# anpingen des pods aus schritt 2
+ping -c4 172.18.0.2
+``` 
