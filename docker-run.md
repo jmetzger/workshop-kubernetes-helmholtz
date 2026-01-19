@@ -26,3 +26,13 @@ exit
 ```
 docker exec my-newubuntu cat /etc/os-release 
 ```
+
+## umschauen logs 
+
+```
+docker exec -it my-newubuntu bash
+```
+
+```
+cd /var/logs/nginx
+```
