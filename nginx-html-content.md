@@ -39,9 +39,9 @@ docker images
 
 # eventually you are not logged in 
 docker login -u dockertrainereu
-docker push dockertrainereu/jm1-hello-web 
+docker push dockertrainereu/<dein-namenskuerzel>-hello-web 
 #aus spass geloescht
-docker rmi dockertrainereu/jm1-hello-web
+docker rmi dockertrainereu/<dein-namenskuerzel>-hello-web
 
 ```
 
