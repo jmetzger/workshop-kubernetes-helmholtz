@@ -39,3 +39,13 @@ cd /var/log/nginx
 # alles auf /dev/stdout und /dev/stderr 
 ls -la 
 ```
+
+## Beispiele direkte Kommandos 
+
+```
+# kommando was nur in der bash existiert cd
+docker run --name log-nginx2 -d nginx
+docker exec log-nginx2 bash -c "cd /etc; ls -la"
+
+docker exec log-nginx ls -la /var/log/nginx
+```
