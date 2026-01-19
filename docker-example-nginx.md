@@ -14,3 +14,12 @@ curl http://localhost:8080
 
 
 ```
+
+## Jeder port kann nur 1x vergeben werden
+
+```
+docker start test-nginx
+
+# Gemecker ist gross, weil Port schon vergeben
+docker run --name test-nginx2 -d -p 8080:80 nginx
+```
