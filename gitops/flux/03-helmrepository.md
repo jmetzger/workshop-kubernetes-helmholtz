@@ -24,20 +24,20 @@ mkdir -p manifests/flux
 cd manifests/flux
 ```
 
-## Schritt 2: HelmRepository fuer Bitnami erstellen
+## Schritt 2: HelmRepository fuer Traefik erstellen
 
-Wir definieren das Bitnami Helm Repository als Quelle:
+Wir definieren das Traefik Helm Repository als Quelle:
 
 ```
-# vi 01-helmrepo-bitnami.yml
+# vi 01-helmrepo-traefik.yml
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: bitnami
+  name: traefik
   namespace: flux-system
 spec:
   interval: 10m
-  url: https://charts.bitnami.com/bitnami
+  url: https://traefik.github.io/charts
 ```
 
 **Erklaerung:**
@@ -50,7 +50,7 @@ spec:
 ## Schritt 3: HelmRepository anwenden
 
 ```
-kubectl apply -f 01-helmrepo-bitnami.yml
+kubectl apply -f 01-helmrepo-traefik.yml
 ```
 
 ## Schritt 4: Status pruefen
@@ -61,56 +61,35 @@ kubectl get helmrepository -n flux-system
 
 **Erwartete Ausgabe:**
 ```
-NAME      URL                                    AGE   READY   STATUS
-bitnami   https://charts.bitnami.com/bitnami     30s   True    stored artifact for revision 'sha256:...'
+NAME      URL                                  AGE   READY   STATUS
+traefik   https://traefik.github.io/charts    30s   True    stored artifact for revision 'sha256:...'
 ```
 
 **Status-Felder:**
 - `READY: True` - Repository Index erfolgreich geladen
 - `STATUS` - Zeigt Revision (SHA256 des Index)
 
-## Schritt 5: Details anzeigen
+## Schritt 5: Weitere Repository hinzufuegen (cloudpirates)
+
+Cloudpirates ist eine Alternative zu Bitnami und bietet frei nutzbare Charts:
 
 ```
-kubectl describe helmrepository bitnami -n flux-system
-```
-
-**Wichtige Informationen:**
-```
-Status:
-  Artifact:
-    Digest:          sha256:abc123...
-    Last Update Time: 2026-01-18T20:00:00Z
-    Path:            helmrepository/flux-system/bitnami/index-abc123.yaml
-    Revision:        sha256:abc123...
-    URL:             http://source-controller.flux-system.svc.cluster.local./helmrepository/...
-  Conditions:
-    Last Transition Time:  2026-01-18T20:00:00Z
-    Message:               stored artifact for revision 'sha256:abc123...'
-    Reason:                Succeeded
-    Status:                True
-    Type:                  Ready
-```
-
-## Schritt 6: Weitere Repository hinzufuegen (Traefik)
-
-```
-# vi 02-helmrepo-traefik.yml
+# vi 02-helmrepo-cloudpirates.yml
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: traefik
+  name: cloudpirates
   namespace: flux-system
 spec:
   interval: 30m
-  url: https://traefik.github.io/charts
+  url: https://cloudpirates-charts.storage.googleapis.com
 ```
 
 ```
-kubectl apply -f 02-helmrepo-traefik.yml
+kubectl apply -f 02-helmrepo-cloudpirates.yml
 ```
 
-## Schritt 7: Alle HelmRepositories anzeigen
+## Schritt 6: Alle HelmRepositories anzeigen
 
 ```
 kubectl get helmrepository -n flux-system
@@ -118,12 +97,12 @@ kubectl get helmrepository -n flux-system
 
 **Erwartete Ausgabe:**
 ```
-NAME      URL                                    AGE    READY   STATUS
-bitnami   https://charts.bitnami.com/bitnami     5m     True    stored artifact...
-traefik   https://traefik.github.io/charts      1m     True    stored artifact...
+NAME            URL                                                  AGE    READY   STATUS
+traefik         https://traefik.github.io/charts                    5m     True    stored artifact...
+cloudpirates    https://cloudpirates-charts.storage.googleapis.com  1m     True    stored artifact...
 ```
 
-## Schritt 8: HelmRepository mit Authentifizierung (optional)
+## Schritt 7: HelmRepository mit Authentifizierung (optional)
 
 Falls ein Repository Authentifizierung benoetigt:
 
@@ -149,17 +128,17 @@ kubectl create secret generic helm-repo-credentials \
   -n flux-system
 ```
 
-## Schritt 9: Manuelles Update triggern (optional)
+## Schritt 8: Manuelles Update triggern (optional)
 
 Flux reconciled automatisch basierend auf `interval`. Manuelles Update:
 
 ```
-flux reconcile source helm bitnami
+flux reconcile source helm traefik
 ```
 
 **Oder mit kubectl:**
 ```
-kubectl annotate helmrepository bitnami -n flux-system \
+kubectl annotate helmrepository traefik -n flux-system \
   reconcile.fluxcd.io/requestedAt="$(date +%s)"
 ```
 
@@ -183,10 +162,9 @@ kubectl annotate helmrepository bitnami -n flux-system \
 
 | Aktion | Befehl |
 |--------|--------|
-| HelmRepository erstellen | `kubectl apply -f 01-helmrepo-bitnami.yml` |
+| HelmRepository erstellen | `kubectl apply -f 01-helmrepo-traefik.yml` |
 | Status pruefen | `kubectl get helmrepository -n flux-system` |
-| Details anzeigen | `kubectl describe helmrepository bitnami -n flux-system` |
-| Manuell aktualisieren | `flux reconcile source helm bitnami` |
+| Manuell aktualisieren | `flux reconcile source helm traefik` |
 
 ## Naechster Schritt
 

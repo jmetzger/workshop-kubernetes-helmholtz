@@ -26,7 +26,7 @@ cd manifests/flux-releases
 
 ## Schritt 2: HelmRelease fuer nginx erstellen
 
-Wir rollen nginx aus dem Bitnami Repository aus:
+Wir rollen nginx aus dem cloudpirates Repository aus:
 
 ```
 # vi 01-helmrelease-nginx.yml
@@ -40,16 +40,17 @@ spec:
   chart:
     spec:
       chart: nginx
-      version: ">=18.0.0 <19.0.0"
+      version: "1.3.3"
       sourceRef:
         kind: HelmRepository
-        name: bitnami
+        name: cloudpirates
         namespace: flux-system
       interval: 10m
   values:
     replicaCount: 2
     service:
       type: ClusterIP
+      port: 80
 ```
 
 **Erklaerung:**
@@ -57,8 +58,8 @@ spec:
 |------|------|-----------|
 | `interval` | `5m` | Pruefe alle 5 Minuten auf Drift/Updates |
 | `chart` | `nginx` | Chart Name aus dem Repository |
-| `version` | `>=18.0.0 <19.0.0` | Semver Constraint (automatische Minor Updates) |
-| `sourceRef` | `bitnami` | Referenz auf HelmRepository |
+| `version` | `1.3.3` | Spezifische Chart Version |
+| `sourceRef` | `cloudpirates` | Referenz auf HelmRepository |
 | `values` | ... | Ueberschreibt Chart Default-Values |
 
 ## Schritt 3: HelmRelease anwenden
@@ -98,27 +99,30 @@ nginx-123abc-xxxxx       1/1     Running   0          2m
 nginx-123abc-yyyyy       1/1     Running   0          2m
 ```
 
-## Schritt 6: Details des HelmRelease anzeigen
+## Schritt 6: Service pruefen
 
 ```
-kubectl describe helmrelease nginx -n default
+kubectl get svc -n default -l app.kubernetes.io/name=nginx
+```
+
+**Erwartete Ausgabe:**
+```
+NAME    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+nginx   ClusterIP   10.245.xxx.xxx  <none>        80/TCP    2m
+```
+
+## Schritt 7: Details des HelmRelease anzeigen
+
+```
+kubectl get helmrelease nginx -n default -o yaml | grep -A 10 status
 ```
 
 **Wichtige Informationen:**
-```
-Status:
-  Conditions:
-    Last Transition Time:  2026-01-18T20:30:00Z
-    Message:               Release reconciliation succeeded
-    Reason:                ReconciliationSucceeded
-    Status:                True
-    Type:                  Ready
-  Last Applied Revision:   18.2.4
-  Last Attempted Revision: 18.2.4
-  Observed Generation:     1
-```
+- `lastAppliedRevision` - Chart Version die installiert wurde
+- `lastAttemptedRevision` - Letzte versuchte Version
+- `conditions` - Status der Reconciliation
 
-## Schritt 7: Helm Release mit helm CLI pruefen
+## Schritt 8: Helm Release mit helm CLI pruefen
 
 Flux nutzt Helm intern. Verifizierung:
 
@@ -129,10 +133,10 @@ helm list -n default
 **Erwartete Ausgabe:**
 ```
 NAME    NAMESPACE  REVISION  UPDATED                   STATUS    CHART          APP VERSION
-nginx   default    1         2026-01-18 20:30:00 UTC   deployed  nginx-18.2.4   1.27.3
+nginx   default    1         2026-01-18 21:00:00 UTC   deployed  nginx-1.3.3    1.27.2
 ```
 
-## Schritt 8: Values anpassen (Declarative Update)
+## Schritt 9: Values anpassen (Declarative Update)
 
 Wir aendern die Replica-Anzahl:
 
@@ -152,76 +156,56 @@ kubectl get pods -n default -l app.kubernetes.io/name=nginx
 
 Nach wenigen Sekunden sollten 3 Pods laufen.
 
-## Schritt 9: Erweitertes Beispiel - MariaDB mit ConfigMap Values
+## Schritt 10: Nginx testen
+
+Port-Forward zum Service:
 
 ```
-# vi 02-helmrelease-mariadb.yml
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: mariadb
-  namespace: databases
-spec:
-  interval: 5m
-  chart:
-    spec:
-      chart: mariadb
-      version: "19.x"
-      sourceRef:
-        kind: HelmRepository
-        name: bitnami
-        namespace: flux-system
-  values:
-    auth:
-      rootPassword: changeme123
-    primary:
-      persistence:
-        enabled: false
+kubectl port-forward -n default svc/nginx 8080:80
 ```
 
-**Namespace erstellen:**
+In einem anderen Terminal:
 ```
-kubectl create namespace databases
-```
-
-**HelmRelease anwenden:**
-```
-kubectl apply -f 02-helmrelease-mariadb.yml
+curl http://localhost:8080
 ```
 
-## Schritt 10: Automatische Upgrades (Semver)
+Erwartete Ausgabe: nginx Welcome-Seite
+
+## Schritt 11: Automatische Upgrades mit Semver (Vorsicht!)
 
 Flux unterstuetzt Semver-Constraints fuer automatische Updates:
 
 | Constraint | Bedeutung | Beispiel |
 |------------|-----------|----------|
-| `18.2.4` | Exakte Version | Keine Updates |
-| `>=18.0.0 <19.0.0` | Minor + Patch Updates | 18.2.4 → 18.3.0 |
-| `18.x` | Alle 18.x Versions | 18.2.4 → 18.9.9 |
+| `1.3.3` | Exakte Version | Keine Updates |
+| `>=1.3.0 <1.4.0` | Patch Updates | 1.3.3 → 1.3.9 |
+| `1.3.x` | Alle 1.3.x Versionen | 1.3.3 → 1.3.9 |
 | `*` | Neueste Version | Alle Updates |
 
-**Vorsicht:** `*` kann Breaking Changes einfuehren!
+**Vorsicht:** Automatische Updates koennen Breaking Changes einfuehren!
 
-## Schritt 11: Rollback bei Fehler (automatisch)
+**Best Practice:** Spezifische Versionen verwenden und manuell upgraden.
+
+## Schritt 12: Rollback bei Fehler (automatisch)
 
 Flux kann automatisch Rollback durchfuehren:
 
 ```
-# vi 03-helmrelease-with-rollback.yml
+# vi 02-helmrelease-with-rollback.yml
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: app-with-rollback
+  name: nginx-safe
   namespace: default
 spec:
   interval: 5m
   chart:
     spec:
       chart: nginx
-      version: "18.x"
+      version: "1.3.3"
       sourceRef:
         kind: HelmRepository
-        name: bitnami
+        name: cloudpirates
         namespace: flux-system
   upgrade:
     remediation:
@@ -230,6 +214,10 @@ spec:
   rollback:
     cleanupOnFail: true
     recreate: true
+  values:
+    replicaCount: 2
+    service:
+      type: ClusterIP
 ```
 
 **Erklaerung:**
@@ -237,22 +225,24 @@ spec:
 - `retries: 3` - 3 Versuche vor Rollback
 - `cleanupOnFail: true` - Resources bei Fehler aufraeumen
 
-## Schritt 12: HelmRelease Suspend (Pausieren)
+## Schritt 13: HelmRelease Suspend (Pausieren)
 
-```
-flux suspend helmrelease nginx -n default
-```
-
-**Oder mit kubectl:**
 ```
 kubectl patch helmrelease nginx -n default \
   --type merge \
   -p '{"spec":{"suspend":true}}'
 ```
 
+**Status pruefen:**
+```
+kubectl get helmrelease nginx -n default
+```
+
 **Resume:**
 ```
-flux resume helmrelease nginx -n default
+kubectl patch helmrelease nginx -n default \
+  --type merge \
+  -p '{"spec":{"suspend":false}}'
 ```
 
 ## Haeufige Szenarien
@@ -262,42 +252,44 @@ flux resume helmrelease nginx -n default
 Flux erkennt manuelle Aenderungen:
 
 ```
-# Manuell Helm Release aendern (nicht empfohlen!)
-helm upgrade nginx bitnami/nginx --set replicaCount=5 -n default
+# Manuell Scale aendern (nicht empfohlen!)
+kubectl scale deployment nginx -n default --replicas=5
 ```
 
-**Flux reconciled automatisch** und setzt `replicaCount` wieder auf den Wert in `values` (z.B. 3).
+**Flux reconciled automatisch** und setzt `replicas` wieder auf den Wert in HelmRelease (z.B. 3).
 
 ### Dependencies zwischen HelmReleases
 
 ```
+# vi 03-helmrelease-with-dependency.yml
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: wordpress
+  name: app-backend
   namespace: default
 spec:
   interval: 5m
   dependsOn:
-    - name: mariadb
-      namespace: databases
+    - name: nginx
+      namespace: default
   chart:
     spec:
-      chart: wordpress
+      chart: nginx
+      version: "1.3.3"
       sourceRef:
         kind: HelmRepository
-        name: bitnami
+        name: cloudpirates
         namespace: flux-system
 ```
 
-**Wordpress wartet** bis `mariadb` HelmRelease erfolgreich ist.
+**app-backend wartet** bis `nginx` HelmRelease erfolgreich ist.
 
 ## Troubleshooting
 
 ### HelmRelease haengt in "Not Ready"
 
 ```
-kubectl describe helmrelease nginx -n default
+kubectl get helmrelease nginx -n default -o yaml
 ```
 
 **Haeufige Gruende:**
@@ -312,16 +304,24 @@ kubectl describe helmrelease nginx -n default
 kubectl logs -n flux-system deployment/helm-controller -f
 ```
 
+### HelmChart Status pruefen
+
+```
+kubectl get helmchart -n flux-system
+```
+
+Flux erstellt automatisch ein `HelmChart` Objekt fuer jedes `HelmRelease`.
+
 ## Zusammenfassung
 
 | Aktion | Befehl |
 |--------|--------|
 | HelmRelease erstellen | `kubectl apply -f 01-helmrelease-nginx.yml` |
 | Status pruefen | `kubectl get helmrelease -n default` |
-| Details anzeigen | `kubectl describe helmrelease nginx -n default` |
-| Suspend | `flux suspend helmrelease nginx -n default` |
-| Resume | `flux resume helmrelease nginx -n default` |
+| Suspend | `kubectl patch helmrelease nginx ... suspend:true` |
+| Resume | `kubectl patch helmrelease nginx ... suspend:false` |
 | Helm Releases anzeigen | `helm list -n default` |
+| Pods pruefen | `kubectl get pods -n default -l app.kubernetes.io/name=nginx` |
 
 ## Was haben wir erreicht?
 
@@ -337,6 +337,7 @@ Im naechsten Schritt koennt ihr:
 - Git als Source nutzen (GitRepository) statt HelmRepository
 - Kustomize mit Flux kombinieren
 - Image Update Automation einrichten
+- Alle HelmReleases in Git commiten (GitOps!)
 
 ## Aufraeumen
 
@@ -344,6 +345,4 @@ Im naechsten Schritt koennt ihr:
 kubectl delete -f .
 ```
 
-```
-kubectl delete namespace databases
-```
+**Hinweis:** Dies loescht alle HelmRelease Objekte und die von ihnen erstellten Resources (Deployments, Services, etc.).
