@@ -10,6 +10,7 @@ docker kill ubuntu-container
 # Get nur, wenn der Container nicht mehr läuft 
 docker rm ubuntu-container
 
+docker run -t -d -name ubuntu-container ubuntu:resolute
 # oder alternative
 docker rm -f ubuntu-container 
 
@@ -18,6 +19,5 @@ docker rm -f ubuntu-container
 docker rmi ubuntu:resolute 
 
 # falls Container noch vorhanden aber nicht laufend 
-docker rmi -f ubuntu:xenial 
 
 ```
