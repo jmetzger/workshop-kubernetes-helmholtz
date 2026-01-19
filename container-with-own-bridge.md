@@ -39,4 +39,17 @@ docker run -it --rm busybox
 ```
 # anpingen des pods aus schritt 2
 ping -c4 172.18.0.2
+exit 
 ``` 
+
+## Schritt 3: anpingen von container im gleichen netzwerk 
+
+```
+docker run -it --rm --network test_net busybox 
+```
+
+```
+# anpingen des pods aus schritt 2
+ping -c4 172.18.0.2
+exit
+```
