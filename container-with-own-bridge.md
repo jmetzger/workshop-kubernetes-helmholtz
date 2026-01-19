@@ -5,7 +5,7 @@
 ```
 # use bridge as type
 # docker network create -d bridge test_net
-# by bridge is default 
+# but bridge is default 
 docker network create test_net
 docker network ls
 docker network inspect test_net
