@@ -30,7 +30,7 @@ docker exec my-newubuntu cat /etc/os-release
 ## umschauen logs 
 
 ```
-docker run -d log-nginx nginx
+docker run --name log-nginx -d nginx
 docker exec -it log-nginx bash
 ```
 
