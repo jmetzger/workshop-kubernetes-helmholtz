@@ -1,4 +1,4 @@
-# Kubernetes Einführung
+# Workshop Kubernetes / docker / Helm / FluxCD 
 
 ## Agenda 
 
