@@ -56,7 +56,7 @@ docker rm -f hello-web
 
 ```
 # und direkt aus der Registry wieder runterladen 
-docker run --name hello-web -p 8080:80 -d dockertrainereu/jm1-hello-web
+docker run --name hello-web -p 8080:80 -d dockertrainereu/<dein-namenskuerzel>-hello-web
 
 # laufenden Container anzeigen lassen
 docker container ls 
