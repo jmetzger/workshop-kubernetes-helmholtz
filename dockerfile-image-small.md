@@ -2,22 +2,42 @@
 
   * Delete all files that are not needed in image 
 
-## Example 
+## Übung - Schritt 1
 
 ```
-## Delete files needed for installation
-## Right after the installation of the necessary 
-# Variante 2
-# nano Dockerfile
-FROM ubuntu:22.04
+cd
+mkdir buildtest
+cd buildtest
+```
+
+```
+nano Dockerfile
+```
+
+```
+FROM ubuntu:24.04
+RUN apt-get update && \
+    apt-get install -y inetutils-ping
+```
+
+```
+docker build -t ubuntu-ping .
+```
+
+
+## Übung: Schritt 2:
+
+```
+# Dockerfile anpassen
+FROM ubuntu:24.04
 RUN apt-get update && \
     apt-get install -y inetutils-ping && \
     rm -rf /var/lib/apt/lists/*
-# CMD ["/bin/bash"]
-
 ```
 
-## Example 2: Start from scratch 
+```
+docker build -t ubuntu-ping-small .
+```
 
- * https://codeburst.io/docker-from-scratch-2a84552470c8
+
 
