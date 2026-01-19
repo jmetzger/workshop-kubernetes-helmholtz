@@ -13,6 +13,15 @@ docker container ls
 docker images
 
 # in den Container reinwechsel 
-docker exec -it my_newubuntu bash 
+docker exec -it my_newubuntu bash
+```
+
+```
+# in der bash
+cat /etc/os-release
+```
+
+
+```
 docker exec my_newubuntu cat /etc/os-release 
 ```
