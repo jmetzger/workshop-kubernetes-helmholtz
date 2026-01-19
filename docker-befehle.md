@@ -19,6 +19,7 @@ docker container ls -a
 # als alternative
 docker ps
 # als alternative (vorhande aber beendet)
+docker ps -a
 
 # z.b hilfe für docker run 
 docker help run 
