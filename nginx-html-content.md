@@ -6,10 +6,8 @@
 # das gleich wie cd ~
 # Heimatverzeichnis des Benutzers root 
 cd
-mkdir nginx-test
-cd nginx-test
-mkdir html
-cd html/
+mkdir -p nginx-test/html
+cd nginx-test/html
 # vi index.html
 nano index.html
 ```
