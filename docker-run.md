@@ -19,6 +19,7 @@ docker exec -it my-newubuntu bash
 ```
 # in der bash
 cat /etc/os-release
+exit
 ```
 
 
