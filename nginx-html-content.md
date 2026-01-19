@@ -11,8 +11,14 @@ cd nginx-test
 mkdir html
 cd html/
 # vi index.html
-Text, den du rein haben möchtest 
+nano index.html
+```
 
+```
+Text, den du rein haben möchtest
+``` 
+
+```
 cd ..
 vi Dockerfile 
 
@@ -22,7 +28,6 @@ COPY html /usr/share/nginx/html
 # nameskürzel z.B. jm1 
 docker build -t dockertrainereu/jm1-hello-web . 
 docker images
-
 ```
 
 
