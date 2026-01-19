@@ -1,6 +1,4 @@
-# Dockerfile design for a small images 
-
-  * Delete all files that are not needed in image 
+# Dockerfile design for small images 
 
 ## Übung - Schritt 1
 
