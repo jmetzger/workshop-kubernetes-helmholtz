@@ -15,7 +15,10 @@ docker images
 # container (laufende) 
 docker container ls 
 # container (vorhanden, aber beendet)
-docker container ls -a 
+docker container ls -a
+# als alternative
+docker ps
+# als alternative (vorhande aber beendet)
 
 # z.b hilfe für docker run 
 docker help run 
