@@ -11,11 +11,3 @@ docker run -d -it  --name devtest --mount type=bind,source=/root,target=/app ngi
 docker exec -it devtest bash 
 /# cd /app 
 ```
-
-## Example 2 with /home/kurs 
-
-```
-# testen wo der DocumentRoot 
-docker run --rm -p 80:80 -it --name=nginx-test nginx bash 
-
-```
