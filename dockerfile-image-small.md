@@ -35,6 +35,7 @@ RUN apt-get update && \
 
 ```
 docker build -t ubuntu-ping-small .
+docker images
 ```
 
 
