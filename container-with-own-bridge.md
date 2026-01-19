@@ -1,7 +1,8 @@
 # Container with own bridge 
 
+## Schritt 1: Netzwerk anlegen und 2. Netzwerk hinzufügen 
+
 ```
-clear
 # use bridge as type
 # docker network create -d bridge test_net
 # by bridge is default 
