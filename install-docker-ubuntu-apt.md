@@ -27,7 +27,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 systemctl status docker 
 ```
 
-## docker-compose ? 
+## docker compose ? 
 
 ```
 # herausfinden, ob docker compose installieren 
