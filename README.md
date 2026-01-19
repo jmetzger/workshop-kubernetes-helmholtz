@@ -24,7 +24,8 @@
      * [Aufräumen - container und images löschen](prune-container-images.md)
      * [Nginx mit portfreigabe laufen lassen](docker-example-nginx.md)    
   
-  1. Dockerfile - Examples 
+  1. Dockerfile - Examples
+     * [Docker image klein halten](/dockerfile-image-small.md)
      * [Ubuntu mit hello world](ubuntu-hello-world.md)
      * [Ubuntu mit ping](ubuntu-ping.md) 
      * [Nginx mit content aus html-ordner](nginx-html-content.md)
