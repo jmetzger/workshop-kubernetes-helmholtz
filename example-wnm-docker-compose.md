@@ -47,7 +47,8 @@ volumes:
 
 ```
 ## now start the system being in the folder *wp*
-docker compose up -d 
+docker compose up -d
+docker compose ps
 ## we can do some test if db is reachable 
 docker exec -it wp_wordpress_1 bash
 ```
