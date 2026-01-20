@@ -13,7 +13,7 @@ nano docker-compose.yml
 ```
 services:
     database:
-        image: mysql:5.7
+        image: mysql:8.0
         volumes:
             - database_data:/var/lib/mysql
         restart: always
