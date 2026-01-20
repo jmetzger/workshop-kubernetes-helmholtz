@@ -1,11 +1,16 @@
 ### Wordpress - blog mit docker compose (Walkthrough)
 
 ```
-mkdir wordpress-mit-docker-compose 
-cd wordpress-mit-docker-compose 
-# nano docker-compose.yml 
-version: "3.7"
+cd
+mkdir wp 
+cd wp
+```
 
+``` 
+nano docker-compose.yml 
+```
+
+```
 services:
     database:
         image: mysql:5.7
@@ -38,8 +43,9 @@ volumes:
     wordpress_plugins:
     wordpress_themes:
     wordpress_uploads:
+```
 
-
+```
 ## now start the system
 docker-compose up -d 
 ## we can do some test if db is reachable 
