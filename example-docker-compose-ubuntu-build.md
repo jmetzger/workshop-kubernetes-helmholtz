@@ -13,6 +13,8 @@ nano docker-compose.yml
 services:
   myubuntu:
     build: ./myubuntu
+# Keep container alive (although using bash)
+    command: sleep infinity
     restart: always
 ```
 
