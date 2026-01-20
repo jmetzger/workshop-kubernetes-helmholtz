@@ -42,7 +42,7 @@ docker compose up -d
 ## Schritt 2 - Testen 
 
 ```
-docker compose exec -it myubuntu 
+docker compose exec -it myubuntu bash
 ```
 
 ```
