@@ -66,7 +66,11 @@ apt update
 apt-get install -y telnet
 # this should work 
 telnet database 3306
-exit
+```
+
+```
+# raus mit 
+STRG + C 
 ```
 
 ```
