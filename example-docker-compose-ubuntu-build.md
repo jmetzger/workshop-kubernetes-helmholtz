@@ -1,5 +1,7 @@
 # Example Docker Compose (Ubuntu with Dockerfile) 
 
+## Schritt 1: Erstellen 
+
 ```
 cd
 mkdir composetest
@@ -33,7 +35,23 @@ cd ../
 #~/bautest
 docker compose up -d 
 # wird image gebaut und container gestartet 
+```
 
-# Bei Veränderung vom Dockerfile, muss man den Parameter --build mitangeben 
+## Schritt 2 - Testen 
+
+```
+docker compose exec -it myubuntu 
+```
+
+```
+# in der bash 
+ping -c4 www.google.de
+exit
+```
+
+## Hinweis:
+
+```
+Bei Veränderung vom Dockerfile, muss man den Parameter --build mitangeben 
 docker compose up -d --build 
 ```
