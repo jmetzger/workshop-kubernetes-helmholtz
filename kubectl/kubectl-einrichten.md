@@ -23,6 +23,7 @@ kubectl create ns <euername>
 kubectl get ns
 kubectl config set-context --current --namespace <euername>
 kubectl get pods
+kubectl config view 
 ```
 
 
