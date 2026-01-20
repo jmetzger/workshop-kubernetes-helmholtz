@@ -28,7 +28,7 @@ CMD ["/bin/bash"]
 
 ```
 cd ../
-# wichtig, im docker-compose - Ordner seiend 
+# wichtig, im mit der docker-compose.yml - seiend 
 #pwd 
 #~/bautest
 docker compose up -d 
