@@ -1,5 +1,7 @@
 ### Wordpress - blog mit docker compose (Walkthrough)
 
+## Schritt 1: Installieren 
+
 ```
 cd
 mkdir wp 
@@ -49,6 +51,11 @@ volumes:
 ## now start the system being in the folder *wp*
 docker compose up -d
 docker compose ps
+```
+
+## Schritt 2: Netzwerk testen 
+
+```
 ## we can do some test if db is reachable 
 docker exec -it wp-wordpress-1 bash
 ```
