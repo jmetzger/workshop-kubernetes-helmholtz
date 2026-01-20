@@ -50,7 +50,7 @@ volumes:
 docker compose up -d
 docker compose ps
 ## we can do some test if db is reachable 
-docker exec -it wp_wordpress_1 bash
+docker exec -it wp-wordpress-1 bash
 ```
 
 ```
