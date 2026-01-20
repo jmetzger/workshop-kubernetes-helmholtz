@@ -3,7 +3,8 @@
 ```
 cd
 mkdir composetest
-cd composetest 
+cd composetest
+nano docker-compose.yml
 ```
 
 ```
