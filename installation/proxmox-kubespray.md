@@ -14,7 +14,7 @@
    * Kubernetes mit eigenem VLAN
    * Alternativ neuerdings: mit SDN (Performance beobachten !)
 
-## Schritt 2: maschine für ansible deployen/nutzen 
+## Schritt 2: maschine mit ansible (kubespray) deployen/nutzen 
 
    * private/public key erstellen und den public auf die maschinen aus Schritt 1 verteilen
    * ansible und git installieren
