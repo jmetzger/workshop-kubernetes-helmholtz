@@ -46,16 +46,22 @@ volumes:
 ```
 
 ```
-## now start the system
-docker-compose up -d 
+## now start the system being in the folder *wp*
+docker compose up -d 
 ## we can do some test if db is reachable 
-docker exec -it wordpress_compose_wordpress_1 bash 
+docker exec -it wp_wordpress_1 bash
+```
+
+```
 ## within shell do 
 apt update 
 apt-get install -y telnet
 # this should work 
 telnet database 3306
+exit
+```
 
+```
 # and we even have logs
-docker-compose logs 
+docker compose logs 
 ```
