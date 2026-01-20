@@ -2,8 +2,8 @@
 
 ```
 cd
-mkdir bautest
-cd bautest 
+mkdir composetest
+cd composetest 
 ```
 
 ```
