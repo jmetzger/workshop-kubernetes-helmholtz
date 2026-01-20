@@ -69,8 +69,10 @@ telnet database 3306
 ```
 
 ```
-# raus mit 
-STRG + C 
+# raus aus telnet  
+STRG + C
+# raus aus dem container  
+exit
 ```
 
 ```
