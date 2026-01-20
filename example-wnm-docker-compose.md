@@ -79,3 +79,14 @@ exit
 # and we even have logs
 docker compose logs 
 ```
+## Schritt 3: Webseite aufrufen 
+
+```
+# Zeigt die IP unter inet an. 
+ip a show eth0
+```
+
+```
+# im browser / ip aus letztem Schritt
+http://<ip>:8080
+```
