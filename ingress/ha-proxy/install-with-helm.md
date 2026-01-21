@@ -21,6 +21,10 @@ helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm upgrade -n ingress-haproxy --install ingress-haproxy haproxytech/kubernetes-ingress --version 1.47.4  --create-namespace --reset-values -f values.yaml  
 ```
 
+```
+kubectl -n ingress-haproxy get pods 
+```
+
 
 ## Ref:
 
