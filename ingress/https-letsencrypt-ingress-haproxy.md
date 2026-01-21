@@ -3,8 +3,8 @@
 ## Schritt 1: cert-manager installieren 
 
 ```
-helm repo add jetstack https://charts.jetstack.io
-helm upgrade --install cert-manager jetstack/cert-manager \
+helm repo add cert-manager https://charts.jetstack.io
+helm upgrade --install cert-manager cert-manager/cert-manager \
 --namespace cert-manager --create-namespace \
 --version v1.19.2 \
 --set crds.enabled=true \
