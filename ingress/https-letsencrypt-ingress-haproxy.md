@@ -54,6 +54,13 @@ kubectl get clusterissuer
 ## Schritt 3: Ingress-Objekt mit TLS erstellen 
 
 ```
+cd
+cd manifests/abi
+nano ingress.yml
+```
+
+
+```
 nano example-ingress.yaml
 ```
 
