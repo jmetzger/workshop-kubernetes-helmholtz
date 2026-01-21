@@ -41,7 +41,9 @@ spec:
     solvers:
     - http01:
         ingress:
-          class: haproxy
+          # class does not work for haproxy, too young,
+          # use ingressClassName instead
+          ingressClassName: haproxy
 ```
 
 ```
