@@ -140,7 +140,7 @@ metadata:
 spec:
   ingressClassName: haproxy
   rules:
-  - host: "<euername>.app.do.t3isp.de"
+  - host: "<euername>.appv1.do.t3isp.de"
     http:
       paths:
         - path: /apple
@@ -284,10 +284,10 @@ kubectl describe ingress example-ingress
 ```
 # Im Browser auf:
 # hier euer Name 
-http://jochen.app.do.t3isp.de/apple
-http://jochen.app.do.t3isp.de/apple/
-http://jochen.app.do.t3isp.de/apple/foo 
-http://jochen.app.do.t3isp.de/banana
+http://jochen.appv1.do.t3isp.de/apple
+http://jochen.appv1.do.t3isp.de/apple/
+http://jochen.appv1.do.t3isp.de/apple/foo 
+http://jochen.appv1.do.t3isp.de/banana
 # geht nicht 
-http://jochen.app.do.t3isp.de/banana/nix
+http://jochen.appv1.do.t3isp.de/banana/nix
 ```
