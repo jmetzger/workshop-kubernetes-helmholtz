@@ -123,6 +123,23 @@ kubectl get secret example-tls
 
   * url im browser aufrufen: z.B. https://jochen.appv1.do.t3isp.de/apple 
 
+## Schritt 6: 80 auf 443 automatisch umleiten 
+
+```
+# in annotations eintragen
+# funktioniert auf jeden Fall bei haproxy 
+metadata:
+  annotations:
+     ingress.kubernetes.io/ssl-redirect: "true"
+     ingress.kubernetes.io/ssl-redirect-port: "443"
+```
+
+```
+kubectl apply -f . 
+```
+
+   * Jetzt funktioniert die Umleitung automatisch 
+
 ## Ref: 
 
   * https://hbayraktar.medium.com/installing-cert-manager-and-nginx-ingress-with-lets-encrypt-on-kubernetes-fe0dff4b1924
