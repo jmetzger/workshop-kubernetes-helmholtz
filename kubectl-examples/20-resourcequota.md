@@ -202,7 +202,11 @@ Loesche zuerst die Pods:
 kubectl delete pod pod1 pod2 pod3 -n resource-<dein-name>
 ```
 
-Versuche einen Pod mit zu viel Memory:
+ * Versuche einen Pod mit zu viel Memory:
+
+```
+nano 23-too-much-pod.yaml
+```
 
 ```
 # vi 06-pod-big.yml
@@ -233,10 +237,6 @@ Error from server (Forbidden): exceeded quota: my-quota, requested: requests.mem
 ```
 
 ## Schritt 8: Test - Pod ohne Resources
-
-```
-nano 23-too-much-pod.yaml
-```
 
 ```
 # vi 07-pod-no-resources.yml
