@@ -72,6 +72,10 @@ pods             0     3
 ## Schritt 4: Pod mit Ressourcen erstellen
 
 ```
+nano 02-pod1.yml
+```
+
+```
 # vi 02-pod1.yml
 apiVersion: v1
 kind: Pod
