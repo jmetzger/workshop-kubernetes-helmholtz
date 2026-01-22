@@ -29,7 +29,7 @@ helm list -A
 helm history my-mariadb 
 ```
 
-## Schritt 3: Umschauen get 
+## Schritt 3: Umschauen mit "helm get" 
 
 ```
 # Wo speichert er Information, die er später mit helm get abruft
