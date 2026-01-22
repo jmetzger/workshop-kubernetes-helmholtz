@@ -28,6 +28,10 @@ cd 20-resourcequota
 ```
 
 ```
+nano 01-resourcequota.yml
+``` 
+
+```
 # vi 01-resourcequota.yml
 apiVersion: v1
 kind: ResourceQuota
