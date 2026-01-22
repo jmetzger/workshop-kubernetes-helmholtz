@@ -235,6 +235,10 @@ Error from server (Forbidden): exceeded quota: my-quota, requested: requests.mem
 ## Schritt 8: Test - Pod ohne Resources
 
 ```
+nano 23-too-much-pod.yaml
+```
+
+```
 # vi 07-pod-no-resources.yml
 apiVersion: v1
 kind: Pod
