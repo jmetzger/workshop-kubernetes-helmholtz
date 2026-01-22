@@ -46,7 +46,7 @@ kubectl apply -f .
 
 # Kurz danach erstellt der Controller aus dem sealed secret das secret 
 kubectl get secret
-kubectl describe secret mariadb-secret 
+kubectl get secret mariadb-secret -o yaml 
 
 kubectl get sealedsecrets 
 kubectl get secret mariadb-secret -o yaml
