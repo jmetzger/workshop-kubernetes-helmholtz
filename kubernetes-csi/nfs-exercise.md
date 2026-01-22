@@ -116,11 +116,17 @@ cd /mnt/nfs
 ls -la
 # outfile
 tail -f outfile
+```
+
+```
+CTRL + C
+```
+
+```
 head outfile 
 ```
 
 ```
-CTRL+C
 exit
 ```
 
