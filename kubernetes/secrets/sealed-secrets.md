@@ -1,4 +1,4 @@
-# Arbeiten mit Sealed Secretes (bitnami) 
+# Arbeiten mit Sealed Secrets (bitnami) 
 
 ## 2 Komponenten 
 
