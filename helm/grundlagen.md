@@ -33,13 +33,10 @@ Wenn wir ein Chart installieren, wird eine Release erstellen
 # Beispiel ubuntu 
 # snap install --classic helm
 
-# Cluster auf das ich zugreifen kann und im client -> helm und kubectl 
-# Voraussetzung auf dem Client-Rechner (helm ist nichts als anderes als ein Client-Programm) 
-Ein lauffähiges kubectl auf dem lokalen System (welches sich mit dem Cluster verbinden.
--> saubere -> .kube/config 
+# Cluster auf das ich zugreifen kann und im client -> helm (und eine entsprechende .kube/config) 
+# (helm ist nichts als anderes als ein Client-Programm)  
 
 # Test
 kubectl cluster-info 
-
 ```
 
