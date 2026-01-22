@@ -17,7 +17,10 @@ kubectl cluster-info
 
 # Welche Ressourcen / Objekte gibt es, z.B. Pod 
 kubectl api-resources 
-kubectl api-resources | grep namespaces 
+kubectl api-resources | grep namespaces
+
+# Zeigt alle api-Gruppen (Landkarten)
+kubectl api-versions
 
 # Hilfe zu object und eigenschaften bekommen
 kubectl explain pod 
