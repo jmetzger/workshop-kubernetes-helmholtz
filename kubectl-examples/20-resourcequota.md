@@ -111,6 +111,10 @@ Jetzt sollte Used aktualisiert sein (z.B. pods: 1, requests.cpu: 100m, etc.)
 Erstelle pod2 und pod3 mit gleichem Format (anderer name: pod2, pod3):
 
 ```
+nano 03-pod2.yml
+```
+
+```
 # vi 03-pod2.yml
 apiVersion: v1
 kind: Pod
@@ -127,6 +131,10 @@ spec:
       limits:
         cpu: "200m"
         memory: "128Mi"
+```
+
+```
+nano 04-pod3.yml
 ```
 
 ```
@@ -152,7 +160,11 @@ spec:
 kubectl apply -f . -n resource-<dein-name>
 ```
 
-Versuche nun einen 4. Pod:
+  * Versuche nun einen 4. Pod:
+
+```
+nano 05-pod4.yml
+```
 
 ```
 # vi 05-pod4.yml
