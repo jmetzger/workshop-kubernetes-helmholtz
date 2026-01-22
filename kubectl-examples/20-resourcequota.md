@@ -205,7 +205,7 @@ kubectl delete pod pod1 pod2 pod3 -n resource-<dein-name>
  * Versuche einen Pod mit zu viel Memory:
 
 ```
-nano 23-too-much-pod.yaml
+nano 06-pod-big.yml
 ```
 
 ```
