@@ -135,6 +135,9 @@
      * [Exercise Sealed Secret mariadb](/kubectl-examples/08-sealed-secret.md)
      * [registry mit secret auth](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
+  1. Alternativen zu bitnami - sealedsecrets
+     * [Openbao - Fork von Hashicorp Vault](https://openbao.org/)
+
   1. Kubernetes API-Objekte (Teil 2)
      *  [Jobs](kubectl-examples/12-job.md)
      *  [Cronjobs](kubectl-examples/11-cronjob.md)
