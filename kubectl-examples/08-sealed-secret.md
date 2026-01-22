@@ -8,7 +8,7 @@
 
 ```
 cd
-cd manifests/secrettest
+cd manifests/cftest 
 ```
 
 ```
