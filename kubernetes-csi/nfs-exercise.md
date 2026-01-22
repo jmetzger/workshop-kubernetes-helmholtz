@@ -165,6 +165,50 @@ exit
 kubectl delete -f .
 ```
 
+## Step 9: use deployment 
+
+```
+nano 04-deploy.yml 
+```
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-nginx-nfs
+spec:
+  selector:
+    matchLabels:
+      web: my-nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        web: my-nginx
+    spec:
+      containers:
+      - image: nginx:1.23
+        name: nginx-nfs
+        command:
+          - "/bin/bash"
+          - "-c"
+          - set -euo pipefail; while true; do echo $(date) >> /mnt/nfs/outfile; sleep 1; done
+        volumeMounts:
+          - name: persistent-storage
+            mountPath: "/mnt/nfs"
+            readOnly: false
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: pvc-nfs-dynamic
+```
+
+````
+kubectl apply -f .
+```
+
 
 ## Reference:
 
