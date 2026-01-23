@@ -79,7 +79,7 @@ helm template .
 helm -n app-<euer-name> template app . 
 ```
 
-### Schritt 1:
+### Schritt 2
 
 ```
 # values-file anlegen
