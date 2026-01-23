@@ -1,6 +1,6 @@
 # Using Dependencies 
 
-## Exercise 1: Create chart with Dependency 
+## Prepare: Create folder structure 
 
 ```
 cd 
@@ -8,6 +8,11 @@ mkdir -p helm-exercises
 cd helm-exercises 
 helm create my-dep
 cd my-dep
+```
+
+## Exercise 1: Create chart with Dependency 
+
+```
 nano Chart.yaml 
 ```
 
