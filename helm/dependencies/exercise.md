@@ -64,7 +64,6 @@ dependencies:
 ```
 
 ```
-cd ..
 nano values.yaml
 ```
 
