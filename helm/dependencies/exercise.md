@@ -47,6 +47,8 @@ helm template .
 
 ## Exercise 2: Create chart with condition 
 
+### Schritt 1 
+
 ```
 nano Chart.yaml
 ```
@@ -73,7 +75,11 @@ redis:
 
 ```
 helm template .
+# oder wenn die release app in namespace installiert wurde 
+helm -n app-<euer-name> template app . 
 ```
+
+### Schritt 1:
 
 ```
 # values-file anlegen
