@@ -110,4 +110,7 @@ helm template my-dep -f ../helm-values/my-dep/values.yaml | grep kind -A 2
 ```
 helm -n app-<euer-name> update --reset-values --install app app -f ../helm-values/app/values.yaml
 ```
+
+```
+helm -n app-<euer-name> status app
 ```
