@@ -100,9 +100,9 @@ redis:
 
 ```
 cd
-cd helm-exercises
-helm template my-dep -f ../helm-values/my-dep/values.yaml
-helm template my-dep -f ../helm-values/my-dep/values.yaml | grep kind -A 2
+cd my-charts
+helm template my-dep -f ../helm-values/app/values.yaml
+helm template my-dep -f ../helm-values/app/values.yaml | grep kind -A 2
 ```
 
 ### Schritt 3: Installation update 
