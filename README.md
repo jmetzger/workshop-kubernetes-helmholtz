@@ -166,6 +166,63 @@
      * [Installation, Upgrade, Uninstall helm-Chart exercise (wordpress-groundhog2k)](exercises/install/wordpress-groundhog2k.md)
      * [Helm Exercise with nginx](/helm/exercise-nginx.md)
      * [Helm Spickzettel](/helm/spickzettel.md)
+
+   1. Arbeiten mit helm - charts (Debugging)
+     * [Nur fertiges manifest ausgeben ohne Installation](helm/commands/template.md)
+     * [Chart trocken testen gegen api-server ohne Installation --dry-run](helm/commands/install--dry-run.md)
+
+  1. Helm Internals
+     * [Helm template - Rendering Prozess](/helm/internals/helm-template-ablauf.md)
+     * [helm vs. kubectl vs. oc](/helm/internals/helm-vs-oc-vs-kubectl.md)
+
+  1. Helm - best practices
+     * [Wann quotes in yaml und in resources  (Kubernetes/OCP)](helm/best-practices/quotes.md)
+     * [Gute Struktur für Values und Charts](helm/best-practices/good-structure-helm-and-values.md)
+     * [Best Practices for Chart Templating](https://helm.sh/docs/chart_best_practices/)
+
+  1. Helm - Advanced
+     * [Helm Dependencies Exercise](helm/dependencies/exercise.md)
+    
+  1. Helm - Good structure, using umbrella chart 
+     * [Exercise helm umbrella chart](helm/dependencies/umbrella-chart.md)
+
+  1. Helm Grundlagen
+     * [TopLevel Objekte](/helm/grundlagen/toplevel-objekte.md)
+      
+  1. Helm Charts entwickeln
+     * [eigenes helm chart erstellen (Gruppe)](/helm/exercises/04a-create-chart-my-app-gruppenarbeit.md)
+     * [Wie starte ich am besten ganz einfach - Übung](/helm/exercises/09-create-helm-chart-from-scratch-deployment.md)
+
+  1. Spezial: Umgang mit Einrückungen
+     * [Whitespaces meistern mit "-"](basics/whitespace-management.md)
+     * [Exercise Whitespaces](/helm/templates/spaces.md)
+
+  1. Type - Conversions
+     * [Exercise toYaml](helm/exercises/01-typeConversionsToYaml.md)
+     * [Exercise toYaml - with app deployoment resources](/helm/exercises/01.01-TypeConversionToYaml-using-app-chart.md)
+    
+  1. Flow Control
+     * [if](/helm/templates/flow-control/02-only-if.md)
+     * [if - render only on condition (HPA)](/helm/templates/flow-control/04-if-render-hpa.md)
+     * [with](/helm/templates/flow-control/02-with.md)
+     * [range](/helm/templates/flow-control/03-range.md)
+
+  1. Named Templates
+     *  [named template](helm/exercises/10-named-template.md)
+     *  [named template with dict](/helm/exercises/11-named-template-with-dict.md)
+    
+  1. Helm - Fehlerhandling 
+     * [Fehlerbehandlung mit require - url muss gesetzt werden](helm/templates/require-url.md)  
+    
+  1. Helm mit gitlab ci/cd
+     * [Helm mit gitlab ci/cd ausrollen](helm/gitlab-ci-cd/example-helm-kubernetes.md)
+
+  1. Metrics - Server
+     * [Metrics - Server mit helm installieren und verwenden](/helm/metrics-server.md)
+    
+  1. helm - Dokumentation
+     * [Helm Documentation](https://helm.sh/docs/)
+     * [Built in TopLevel - Objects like .Release](https://helm.sh/docs/chart_template_guide/builtin_objects/)
     
   1. Helm Charts erstellen und analysieren
      * [Eigenes Helm-Chart erstellen](helm/exercises/04a-create-chart-my-app-gruppenarbeit.md)
