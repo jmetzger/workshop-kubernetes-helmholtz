@@ -151,6 +151,17 @@ helm get values my-mariadb
 # Beispiel: 
 helm get values  my-mariadb --revision 1
 ```
+```
+# Advanced 
+helm history my-mariadb 
+helm get values  my-mariadb --revision 1 > v1.yaml
+helm get values  my-mariadb --revision 2 > v2.yaml
+diff v1.yaml v2.yaml 
+```
+
+
+
+
 
 ### Uninstall 
 
