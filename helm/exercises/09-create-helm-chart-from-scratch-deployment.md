@@ -18,7 +18,6 @@ cd app
 cd templates
 rm -fR tests
 rm -fR *.yaml
-rm NOTES.txt
 echo "meine app ist ausgerollt" > NOTES.txt
 cd ..
 rm values.yaml
