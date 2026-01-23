@@ -27,13 +27,13 @@ helm template my-app
 
 ```
 # Variante 1:
-helm -n my-app-<namenskuerzel> install meine-app my-app --create-namespace 
+helm -n my-app-<namenskuerzel> install meine-app my-app --create-namespace --reset-values
 ```
 
 ```
 # Variante 2:
 cd my-app
-helm -n my-app-<namenskuerzel> install meine-app . --create-namespace 
+helm -n my-app-<namenskuerzel> install meine-app . --create-namespace  --reset-values 
 ```
 
 ```
