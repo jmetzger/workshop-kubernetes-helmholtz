@@ -4,10 +4,9 @@
 
 ```
 cd 
-mkdir -p helm-exercises 
-cd helm-exercises 
-helm create my-dep
-cd my-dep
+mkdir -p my-charts 
+helm create app
+cd app
 ```
 
 ## Exercise 1: Create chart with Dependency 
@@ -59,7 +58,7 @@ nano Chart.yaml
 dependencies:
   - name: redis
     version: "0.9.x"
-    repository: "oci://registry-1.docker.io/cloudpirates/"
+    repository: "oci://registry-1.docker.io/cloudpirates"
     condition: redis.enabled
 ```
 
@@ -86,8 +85,8 @@ helm -n app-<euer-name> template app .
 cd
 mkdir -p helm-values
 cd helm-values
-mkdir my-dep
-cd my-dep
+mkdir app
+cd app
 ```
 
 ```
@@ -104,4 +103,11 @@ cd
 cd helm-exercises
 helm template my-dep -f ../helm-values/my-dep/values.yaml
 helm template my-dep -f ../helm-values/my-dep/values.yaml | grep kind -A 2
+```
+
+### Schritt 3: Installation update 
+
+```
+helm -n app-<euer-name> update --reset-values --install app app -f ../helm-values/app/values.yaml
+```
 ```
