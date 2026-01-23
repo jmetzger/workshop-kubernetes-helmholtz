@@ -22,7 +22,7 @@ nano _helpers.tpl
   * Das am Ende einfügen -> 
 
 ```
-{{/* Definiere ein named template namens "mychart.containerPort" */}}
+{{/* Definiere ein named template namens "range.containerPort" */}}
 {{- define "range.containerPort" -}}
 - name: http
   containerPort: 80
