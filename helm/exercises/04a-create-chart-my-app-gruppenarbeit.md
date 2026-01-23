@@ -12,6 +12,17 @@ cd my-charts
 helm create my-app
 ``` 
 
+## Aufbau des Charts erkunden 
+
+
+
+## helm template (Das Chart nur rendern) 
+
+```
+helm template my-app
+```
+
+
 ## Install helm - chart 
 
 ```
