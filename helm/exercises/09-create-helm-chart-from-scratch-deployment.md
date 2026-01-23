@@ -2,7 +2,7 @@
 
   * Really simple version to start 
 
-# Step 1: Create sample chart 
+## Step 1: Create sample chart 
 
 ```
 cd
@@ -12,7 +12,7 @@ helm create app
 cd app
 ```
 
-# Step 2: Cleanup 
+## Step 2: Cleanup 
 
 ```
 cd templates
@@ -26,7 +26,7 @@ rm values.yaml
 touch values.yaml 
 ```
 
-# Step 3: Create Deployment manifest 
+## Step 3: Create Deployment manifest 
 
 ```
 nano templates/deployment.yaml
