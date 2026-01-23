@@ -72,7 +72,7 @@ helm show values oci://registry-1.docker.io/cloudpirates/mariadb | less
 cd 
 mkdir -p mariadb-values 
 cd mariadb-values
-mkdir prod
+mkdir -p prod
 cd prod
 ```
 
