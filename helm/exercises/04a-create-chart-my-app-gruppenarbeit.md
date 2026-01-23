@@ -38,5 +38,7 @@ helm -n my-app-<namenskuerzel> install meine-app . --create-namespace
 
 ```
 kubectl -n my-app-<namenskuerzel> get all
-kubectl -n my-app-<namenskuerzel> get pods 
+kubectl -n my-app-<namenskuerzel> get pods
+helm -n my-app-jochen status meine-app
+
 ```
