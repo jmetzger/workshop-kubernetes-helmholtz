@@ -61,7 +61,9 @@ helm lint .
 # Akzeptiert der API das so, wie ich es ihm schicke 
 helm -n app-<namenskuerzel> install app . --dry-run  
 helm -n app-<namenskuerzel> upgrade --install app . --create-namespace
-kubectl -n app-<namenskuerzel> get all 
+kubectl -n app-<namenskuerzel> get all
+helm -n app-<namenskuerzel> list
+helm -n app-<namenskuerzel> status app 
 ```
 
 
