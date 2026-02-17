@@ -46,6 +46,7 @@ spec:
   chart:
     spec:
       chart: traefik
+      version: 39.0.1
       sourceRef:
         kind: HelmRepository
         name: traefik
@@ -66,7 +67,7 @@ git push
 | Feld | Wert | Bedeutung |
 |------|------|-----------|
 | `interval` | `5m` | Pruefe alle 5 Minuten auf Drift/Updates |
-| `chart` | `nginx` | Chart Name aus dem Repository |
+| `chart` | `traefik` | Chart Name aus dem Repository |
 | `version` | `1.3.3` | Spezifische Chart Version |
 | `sourceRef` | `cloudpirates` | Referenz auf HelmRepository |
 | `values` | ... | Ueberschreibt Chart Default-Values |
