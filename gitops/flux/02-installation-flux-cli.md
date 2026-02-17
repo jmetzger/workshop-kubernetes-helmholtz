@@ -59,11 +59,20 @@ flux check --precheck
 <img width="1402" height="732" alt="image" src="https://github.com/user-attachments/assets/339149cc-0d4a-4f45-8f0a-bf26729445fa" />
 
 
-## Schritt 4: Flux mit gitlab verbinden 
+## Schritt 5: Flux in gitlab bootstrappen  
 
 
 ```
 # Endpunkt für die Flux - Konfigurationsobjekte einrichten
+export GITLAB_TOKEN=<dein-personal-access-token>
+
+# Bootstrap für Production-Cluster
+flux bootstrap gitlab \
+  --owner=training-tn<Deine-Teilnehmer-Nr> \
+  --repository=<Dein-Repo> \
+  --branch=main \
+  --path=clusters/production \
+  --token-auth
 ```
 
 
