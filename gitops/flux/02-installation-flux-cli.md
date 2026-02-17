@@ -75,5 +75,7 @@ flux bootstrap gitlab \
   --token-auth
 ```
 
+<img width="1290" height="783" alt="image" src="https://github.com/user-attachments/assets/6c1d1118-40c4-488d-9cfb-bd0b58a25e9c" />
+
 
 
