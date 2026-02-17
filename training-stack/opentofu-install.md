@@ -35,9 +35,9 @@ helmfile sync
 ```
 # Sollte es nicht sauber durchlaufen
 # einfach nochmal
-terraform apply -auto-approve
+tofu apply -auto-approve
 
 # Wenn das nicht geht, einfach nochmal neu
-terraform destroy -auto-approve
-terraform apply -auto-approve
+tofu destroy -auto-approve
+tofu apply -auto-approve
 ```
