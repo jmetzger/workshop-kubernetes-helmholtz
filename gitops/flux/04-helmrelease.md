@@ -234,6 +234,30 @@ spec:
 - `retries: 3` - 3 Versuche vor Rollback
 - `cleanupOnFail: true` - Resources bei Fehler aufraeumen
 
+## Schritt 14: Überprüfen 
+
+```
+# 1. Hat Flux die Git-Änderung erkannt?
+flux get sources git
+
+# 2. Ist die HelmRelease erfolgreich?
+flux get helmreleases -n traefik
+
+# 3. Details bei Problemen
+flux events --for HelmRelease/traefik -n traefik
+
+# 4. Logs des Helm-Controllers
+flux logs --kind=HelmRelease --name=traefik -n traefik
+
+# 5. Kubernetes-Ebene prüfen
+kubectl get pods -n traefik
+kubectl get svc -n traefik
+
+# 6. Sofort reconcilen statt warten
+flux reconcile source git flux-system
+flux reconcile helmrelease traefik -n traefik
+```
+
 ## Schritt 13: HelmRelease Suspend (Pausieren)
 
 ```
@@ -242,56 +266,9 @@ kubectl patch helmrelease nginx -n default \
   -p '{"spec":{"suspend":true}}'
 ```
 
-**Status pruefen:**
-```
-kubectl get helmrelease nginx -n default
-```
 
-**Resume:**
-```
-kubectl patch helmrelease nginx -n default \
-  --type merge \
-  -p '{"spec":{"suspend":false}}'
-```
 
-## Haeufige Szenarien
 
-### Drift Detection
-
-Flux erkennt manuelle Aenderungen:
-
-```
-# Manuell Scale aendern (nicht empfohlen!)
-kubectl scale deployment nginx -n default --replicas=5
-```
-
-**Flux reconciled automatisch** und setzt `replicas` wieder auf den Wert in HelmRelease (z.B. 3).
-
-### Dependencies zwischen HelmReleases
-
-```
-# vi 03-helmrelease-with-dependency.yml
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: app-backend
-  namespace: default
-spec:
-  interval: 5m
-  dependsOn:
-    - name: nginx
-      namespace: default
-  chart:
-    spec:
-      chart: nginx
-      version: "1.3.3"
-      sourceRef:
-        kind: HelmRepository
-        name: cloudpirates
-        namespace: flux-system
-```
-
-**app-backend wartet** bis `nginx` HelmRelease erfolgreich ist.
 
 ## Troubleshooting
 
