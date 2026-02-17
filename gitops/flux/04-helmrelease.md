@@ -140,71 +140,23 @@ git push
 ```
 flux get source git
 kubectl -n ingress get helmrelease traefik
+helm -n ingress get values traefik
 ```
 
+<img width="357" height="90" alt="image" src="https://github.com/user-attachments/assets/5ca35cde-0395-4e6c-b177-ba25bdc9e9ae" />
 
 
-**Erwartete Ausgabe:**
-```
-NAME    AGE   READY   STATUS
-nginx   1m    True    Release reconciliation succeeded
-```
-
-**Status-Felder:**
-- `READY: True` - Helm Release erfolgreich installiert
-- `STATUS` - Details zur Reconciliation
-
-## Schritt 5: Helm Release verifizieren
-
-Flux fuehrt intern Helm-Befehle aus. Verifizierung:
-
-```
-kubectl get pods -n default -l app.kubernetes.io/name=nginx
-```
-
-**Erwartete Ausgabe:**
-```
-NAME                     READY   STATUS    RESTARTS   AGE
-nginx-123abc-xxxxx       1/1     Running   0          2m
-nginx-123abc-yyyyy       1/1     Running   0          2m
-```
-
-## Schritt 6: Service pruefen
-
-```
-kubectl get svc -n default -l app.kubernetes.io/name=nginx
-```
-
-**Erwartete Ausgabe:**
-```
-NAME    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
-nginx   ClusterIP   10.245.xxx.xxx  <none>        80/TCP    2m
-```
 
 ## Schritt 7: Details des HelmRelease anzeigen
 
 ```
-kubectl get helmrelease nginx -n default -o yaml | grep -A 10 status
+kubectl get helmrelease traefik -n ingress -o yaml | grep -A 10 status
 ```
 
 **Wichtige Informationen:**
 - `lastAppliedRevision` - Chart Version die installiert wurde
 - `lastAttemptedRevision` - Letzte versuchte Version
 - `conditions` - Status der Reconciliation
-
-## Schritt 8: Helm Release mit helm CLI pruefen
-
-Flux nutzt Helm intern. Verifizierung:
-
-```
-helm list -n default
-```
-
-**Erwartete Ausgabe:**
-```
-NAME    NAMESPACE  REVISION  UPDATED                   STATUS    CHART          APP VERSION
-nginx   default    1         2026-01-18 21:00:00 UTC   deployed  nginx-1.3.3    1.27.2
-```
 
 ## Schritt 9: Values anpassen (Declarative Update)
 
@@ -303,20 +255,6 @@ flux get sources git
 
 # 2. Ist die HelmRelease erfolgreich?
 flux get helmreleases -n traefik
-
-# 3. Details bei Problemen
-flux events --for HelmRelease/traefik -n traefik
-
-# 4. Logs des Helm-Controllers
-flux logs --kind=HelmRelease --name=traefik -n traefik
-
-# 5. Kubernetes-Ebene prüfen
-kubectl get pods -n traefik
-kubectl get svc -n traefik
-
-# 6. Sofort reconcilen statt warten
-flux reconcile source git flux-system
-flux reconcile helmrelease traefik -n traefik
 ```
 
 ## Schritt 13: HelmRelease Suspend (Pausieren)
