@@ -40,7 +40,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: traefik
-  namespace: traefik
+  namespace: ingress
 spec:
   interval: 5m
   chart:
@@ -72,17 +72,77 @@ git push
 | `sourceRef` | `cloudpirates` | Referenz auf HelmRepository |
 | `values` | ... | Ueberschreibt Chart Default-Values |
 
-## Schritt 3: HelmRelease anwenden
-
-```
-kubectl apply -f 01-helmrelease-nginx.yml
-```
-
 ## Schritt 4: Status pruefen
 
 ```
-kubectl get helmrelease -n default
+kubectl get helmrelease -A
+# Fehler
 ```
+
+<img width="1902" height="112" alt="image" src="https://github.com/user-attachments/assets/569129b6-03c7-474e-ada4-9ff6c91c8d69" />
+
+```
+kubectl -n ingress describe helmrelease traefik 
+# Fehler
+```
+
+```
+ 2026-02-17T17:45:18.943742569Z: preparing upgrade for traefik
+2026-02-17T17:45:19.054850747Z: resetting values to the chart's original version
+  Warning  UpgradeFailed  55s  helm-controller  (combined from similar events): Helm upgrade failed for release ingress/traefik with chart traefik@39.0.1: values don't meet the specifications of the schema(s) in the following chart(s):
+traefik:
+- at '': additional properties 'replicas' not allowed
+```
+
+
+## Schritt 5: Richtige values für deployments recherchieren 
+
+```
+in artifacthub.io
+```
+
+### Schritt 6: values korrigieren 
+
+```
+nano infrastructure/releases/traefik.yml
+```
+
+```
+# vi infrastructure/releases/traefik.yml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: ingress
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      version: 39.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  install:
+    createNamespace: true
+  values:
+    deployment:
+      replicas: 2
+```
+
+```
+git add -A
+git commit -am "adjusted replicas"
+git push
+```
+
+```
+flux get source git
+kubectl -n ingress get helmrelease traefik
+```
+
+
 
 **Erwartete Ausgabe:**
 ```
