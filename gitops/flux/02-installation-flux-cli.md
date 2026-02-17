@@ -40,7 +40,7 @@ flux check --precheck
 # Klicken auf "Create Project"
 ```
 
-!NOTE: 
+> [!IMPORTANT] 
 > Token am Ende rauskopieren 
 
 
