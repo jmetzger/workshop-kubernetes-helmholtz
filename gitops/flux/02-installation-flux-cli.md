@@ -40,6 +40,10 @@ flux check --precheck
 # Klicken auf "Create Project"
 ```
 
+!NOTE: 
+> Token am Ende rauskopieren 
+
+
 ## Schritt 4: Token für project erstellen 
 
 ```
