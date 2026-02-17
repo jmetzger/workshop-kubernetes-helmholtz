@@ -18,11 +18,48 @@ flux completion bash > /etc/bash_completion.d/flux
 ```
 
 
-## Schritt 2: flux deployen 
+## Schritt 2: flux check --precheck (Voraussetzungen erfüllt ?)  
 
 ```
-# ist flux bereits installiert ? 
-flux check
+# Stimmen die Voraussetzungen ?
+flux check --precheck 
+```
+
+
+## Schritt 3: gitlab - repo einrichten 
+
+```
+1. https://gitlab.com/projects/new#blank_project
+
+```
+
+<img width="1275" height="795" alt="image" src="https://github.com/user-attachments/assets/41e46904-3972-4c77-9be4-0f8960b268f3" />
+
+
+```
+# Klicken auf "Create Project"
+```
+
+## Schritt 4: Token für project erstellen 
+
+```
+1. https://gitlab.com/jmetzger/flux-test-jm/-/settings/access_tokens
+```
+
+
+```
+* Api rechte vergeben.
+* Maintainer Rolle wird mindestens benötigt, da flux, deploy keys verwaltet und repository Einstellungen setzen können muss.
+```
+
+<img width="1402" height="732" alt="image" src="https://github.com/user-attachments/assets/339149cc-0d4a-4f45-8f0a-bf26729445fa" />
+
+
+## Schritt 4: Flux mit gitlab verbinden 
+
+
+```
+# Endpunkt für die Flux - Konfigurationsobjekte einrichten
 ```
 
 
