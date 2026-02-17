@@ -13,7 +13,7 @@
 
 ## Voraussetzungen
 
-- Flux installiert (siehe [02-installation-helm.md](02-installation-helm.md))
+- Flux installiert (siehe [02-installation-flux-cli.md](02-installation-flux-cli.md))
 - HelmRepository erstellt (siehe [03-helmrepository.md](03-helmrepository.md))
 
 ## Schritt 1: Vorbereitung
