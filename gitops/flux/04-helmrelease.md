@@ -18,39 +18,48 @@
 
 ## Schritt 1: Vorbereitung
 
+  * **Achtung: unser Flux - Replo muss geklont worden sein**
+
 ```
 cd
-mkdir -p manifests/flux-releases
-cd manifests/flux-releases
+mkdir -p manifests/flux/infrastructure/releases
+cd manifests/flux/infrastructure/releases 
 ```
 
-## Schritt 2: HelmRelease fuer nginx erstellen
+## Schritt 2: HelmRelease fuer traefik erstellen
 
-Wir rollen nginx aus dem cloudpirates Repository aus:
+Wir rollen traefik aus dem traefik Repository aus:
 
 ```
-# vi 01-helmrelease-nginx.yml
+nano infrastructure/releases/traefik.yml
+```
+
+```
+# vi infrastructure/releases/traefik.yml
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nginx
-  namespace: default
+  name: traefik
+  namespace: traefik
 spec:
   interval: 5m
   chart:
     spec:
-      chart: nginx
-      version: "1.3.3"
+      chart: traefik
       sourceRef:
         kind: HelmRepository
-        name: cloudpirates
+        name: traefik
         namespace: flux-system
-      interval: 10m
+  install:
+    createNamespace: true
   values:
-    replicaCount: 2
-    service:
-      type: ClusterIP
-      port: 80
+    replicas: 2
+```
+
+```
+git add -A
+git commit -am "Added HelmRelease"
+git push
 ```
 
 **Erklaerung:**
