@@ -29,6 +29,10 @@ cd manifests/flux
 Wir definieren das Traefik Helm Repository als Quelle:
 
 ```
+nano 01-helmrepo-traefik.yml
+```
+
+```
 # vi 01-helmrepo-traefik.yml
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
