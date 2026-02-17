@@ -21,5 +21,9 @@ flux completion bash > /etc/bash_completion.d/flux
 ## Schritt 2: flux deployen 
 
 ```
+# ist flux bereits installiert ? 
 flux check
+```
+
+
 
