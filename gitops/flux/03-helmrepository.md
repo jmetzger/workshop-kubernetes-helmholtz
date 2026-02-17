@@ -69,27 +69,8 @@ traefik   https://traefik.github.io/charts    30s   True    stored artifact for 
 - `READY: True` - Repository Index erfolgreich geladen
 - `STATUS` - Zeigt Revision (SHA256 des Index)
 
-## Schritt 5: Weitere Repository hinzufuegen (cloudpirates)
 
-Cloudpirates ist eine Alternative zu Bitnami und bietet frei nutzbare Charts:
-
-```
-# vi 02-helmrepo-cloudpirates.yml
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: cloudpirates
-  namespace: flux-system
-spec:
-  interval: 30m
-  url: https://cloudpirates-charts.storage.googleapis.com
-```
-
-```
-kubectl apply -f 02-helmrepo-cloudpirates.yml
-```
-
-## Schritt 6: Alle HelmRepositories anzeigen
+## Schritt 5: Alle HelmRepositories anzeigen
 
 ```
 kubectl get helmrepository -n flux-system
@@ -99,10 +80,9 @@ kubectl get helmrepository -n flux-system
 ```
 NAME            URL                                                  AGE    READY   STATUS
 traefik         https://traefik.github.io/charts                    5m     True    stored artifact...
-cloudpirates    https://cloudpirates-charts.storage.googleapis.com  1m     True    stored artifact...
 ```
 
-## Schritt 7: HelmRepository mit Authentifizierung (optional)
+## Schritt 6: HelmRepository mit Authentifizierung (optional)
 
 Falls ein Repository Authentifizierung benoetigt:
 
@@ -128,7 +108,7 @@ kubectl create secret generic helm-repo-credentials \
   -n flux-system
 ```
 
-## Schritt 8: Manuelles Update triggern (optional)
+## Schritt 7: Manuelles Update triggern (optional)
 
 Flux reconciled automatisch basierend auf `interval`. Manuelles Update:
 
