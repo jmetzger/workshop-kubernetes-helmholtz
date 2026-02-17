@@ -9,6 +9,17 @@ sudo su -
 ```
 
 ```
-cd /usr/local/bin
 curl -s https://fluxcd.io/install.sh | sudo bash
 ```
+
+```
+# Autocompletion aktivieren
+flux completion bash > /etc/bash_completion.d/flux 
+```
+
+
+## Schritt 2: flux deployen 
+
+```
+flux check
+
