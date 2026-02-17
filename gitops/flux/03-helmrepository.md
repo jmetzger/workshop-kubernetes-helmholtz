@@ -20,8 +20,13 @@
 
 ```
 cd
-mkdir -p manifests/flux
-cd manifests/flux
+mkdir -p manifests
+cd manifests
+```
+
+```
+git clone https://gitlab.com/jmetzger/<dein-repo-name>.git flux
+cd flux
 ```
 
 ## Schritt 2: HelmRepository fuer Traefik erstellen
@@ -29,11 +34,17 @@ cd manifests/flux
 Wir definieren das Traefik Helm Repository als Quelle:
 
 ```
-nano 01-helmrepo-traefik.yml
+mkdir -p clusters/production/infrastructure/sources
+mkdir -p clusster/production/infrastructure/releases
+mkdir -p clusters/production/apps/sources
+mkdir -p clusters/production/apps/releases 
+
+cd clusters/production/
+nano infrastructure/sources/traefik.yml
 ```
 
 ```
-# vi 01-helmrepo-traefik.yml
+# vi infrastructure/sources/traefik.yml
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -43,6 +54,23 @@ spec:
   interval: 10m
   url: https://traefik.github.io/charts
 ```
+
+```
+git config --global user.email "name@email.com"
+git config --global user.name "Dein Name" 
+git add -A
+git commit -am "Added helmRepository"
+git push -u origin main
+# username: training.tn<deine-nr>
+# passwort: bekanntes Passwort eingeben
+```
+
+## Schritt 3: Aktualisierung dauert ca. 1 Minute 
+
+```
+kubectl get helmrepository -A
+```
+
 
 **Erklaerung:**
 | Feld | Wert | Bedeutung |
