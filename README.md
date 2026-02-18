@@ -237,6 +237,7 @@
      * [HelmRepository - Helm Chart Repositories verwalten](gitops/flux/03-helmrepository.md)
      * [HelmRelease - Helm Charts deklarativ ausrollen](gitops/flux/04-helmrelease.md)
      * [OCI-Helm-Chart verwalten an Beispiel Cloudimages / mariadb](gitops/flux/05-oci-helm-chart.md)
+     * [Eigenes Chart erstellen und deployen](gitops/flux/06-eigenes-helmchart-verwenden.md)
 
   1. Helpful plugins
      * [Use shortnames for kubectl - commands](https://gist.github.com/doevelopper/ff4a9a211e74f8a2d44eb4afb21f0a38)
