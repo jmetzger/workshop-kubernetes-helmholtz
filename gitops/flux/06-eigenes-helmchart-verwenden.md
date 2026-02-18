@@ -101,3 +101,9 @@ spec:
     service:
       type: NodePort
 ```
+
+```
+git add -A
+git commit -am "added final-chart"
+git push
+```
