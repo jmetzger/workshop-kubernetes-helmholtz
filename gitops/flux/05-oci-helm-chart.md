@@ -93,10 +93,44 @@ watch flux get kustomizations
 # << raus kommt ihr wieder mit CTRL+C 
 ```
 
+## Schritt 4: HelmRelease anlegen 
+
+   * version wird hier nicht verwendet, weil das bereits im OCIRepository ist.
+
+```
+cd
+# Falls noch nicht existent, tut aber auch ansonsten nicht weh !
+mkdir -p manifests/flux/clusters/production/app/releases 
+cd manifests/flux/clusters/production/apps/releases
+nano mariadb.yaml
+```
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mariadb
+  namespace: default
+spec:
+  interval: 10m
+  chartRef:
+    kind: OCIRepository
+    name: cloudpirates-mariadb
+    namespace: flux-system
+```
+
+```
+git add -A
+git commit -am "added helmrelease mariadb"
+git push
+```
+
+
 
 ## Schritt 6: War die installation für mariadb - erfolgreich ?
 
 ```
+flux get helmreleases 
 kubectl get pods
 # Was ist das Problem ?
 kubectl describe pods mariadb
@@ -118,5 +152,24 @@ kubectl -n kubesystem get pods | grep nfs
 # Was ist jetzt mit dem mariadb pod
 # Creating .... Ready -> 1/1 dauert immer einen Moment 
 kubectl get pods
+```
+
+## Schritt 8: flux geradeziehen 
+
+  * Wenn es zu lange dauert, könnte es sein, dass flux immer noch einen fehler anzeigt
+
+```
+flux get helmreleases -A
+```
+
+<img width="1900" height="199" alt="image" src="https://github.com/user-attachments/assets/1e18b427-73d1-4b1e-9561-f43fad12460b" />
+
+```
+# falls dieser hängt 
+flux reconcile helmrelease mariadb -n default
+# machen wir das mit --force 
+flux reconcile helmrelease mariadb -n default --force
+helm list -A
+helm -n default status mariadb
 ```
 
