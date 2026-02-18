@@ -48,7 +48,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://gitlab.com/training-tn<nr>/final-helm-chart-<nr>
+  url: https://gitlab.com/training-tn<nr>/final-helm-chart-<nr>.git
   ref:
     branch: master
 ```
