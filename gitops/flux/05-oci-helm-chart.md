@@ -44,14 +44,45 @@ git push
 # bzw. bis der Fehler kommt (System mach erst ein dry-run und spring noch garnicht auf die neue commit-id
 ```
 
+```
+# Er hat das richtige commit gezogen
+flux get sources git
+# aber dieses noch nicht angewendet
+flux get kustomizations
+```
+
 <img width="1898" height="120" alt="image" src="https://github.com/user-attachments/assets/99830fd5-8e49-4e72-b0f1-645fb377480a" />
 
 ```
 # das Feld "version" gibt es nicht
 ```
 
-## Schritt 3:
+## Schritt 3: version ändern in tag:
 
+```
+nano cloudpirates.yaml 
+``` 
+
+```
+# oci-cloudpirates.yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: cloudpirates-mariadb
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: oci://registry-1.docker.io/cloudpirates/mariadb
+  ref:
+    version: "0.14.1"
+```
+
+```
+# Wieder nach online pushen
+git add -A
+git commit -am "Added OCIRepository cloudpirates-mariadb"
+git push
+```
 
 
 
