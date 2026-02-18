@@ -74,7 +74,8 @@ spec:
   interval: 10m
   url: oci://registry-1.docker.io/cloudpirates/mariadb
   ref:
-    version: "0.14.1"
+# ---> hier: von version -> nach -> tag
+    tag: "0.14.1"
 ```
 
 ```
@@ -84,6 +85,13 @@ git commit -am "Added OCIRepository cloudpirates-mariadb"
 git push
 ```
 
+```
+# Er hat das richtige commit gezogen
+flux get sources git
+# aber dieses noch nicht angewendet
+watch flux get kustomizations
+# << raus kommt ihr wieder mit CTRL+C 
+```
 
 
 ## Schritt 6: War die installation für mariadb - erfolgreich ?
