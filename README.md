@@ -233,9 +233,10 @@
 
   1. GitOps mit Flux
      * [Flux Ueberblick - Controller, CRDs und Ablauf](gitops/flux/01-overview.md)
-     * [Flux Installation mit Helm](gitops/flux/02-installation-helm.md)
+     * [Flux Installation mit flux-cli](gitops/flux/02-installation-flux-cli.md)
      * [HelmRepository - Helm Chart Repositories verwalten](gitops/flux/03-helmrepository.md)
      * [HelmRelease - Helm Charts deklarativ ausrollen](gitops/flux/04-helmrelease.md)
+     * [OCI-Helm-Chart verwalten an Beispiel Cloudimages / mariadb](gitops/flux/05-oci-helm-chart.md)
 
   1. Helpful plugins
      * [Use shortnames for kubectl - commands](https://gist.github.com/doevelopper/ff4a9a211e74f8a2d44eb4afb21f0a38)
