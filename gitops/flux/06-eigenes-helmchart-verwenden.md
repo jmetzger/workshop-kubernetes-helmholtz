@@ -58,3 +58,46 @@ git add -A
 git commit -am "added gitrepository"
 git push
 ```
+
+## Schritt 5: Überprüfen ob es geklappt hat 
+
+  * Das kann 1 Minute dauern bis man es sieht
+
+```
+flux get source git 
+```
+
+## Schritt 6: helmRelease einpflegen 
+
+```
+mkdir -p manifests/flux/clusters/production/apps/releases  
+cd manifests/flux/clusters/production/apps/releases
+```
+
+```
+nano final-chart.yaml
+```
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: final-chart
+  namespace: mein-nginx
+spec:
+  interval: 1m
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: final-chart         # Pfad zum Chart im Repo
+      version: "0.1.0"
+      sourceRef:
+        kind: GitRepository
+        name: mein-helm-chart
+        namespace: flux-system
+  values:
+    replicaCount: 2
+    service:
+      type: NodePort
+```
