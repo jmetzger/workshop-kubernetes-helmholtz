@@ -83,9 +83,10 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: final-chart
-  namespace: mein-nginx
+  namespace: flux-system
 spec:
   interval: 1m
+  targetNamespace: ns-final-chart
   install:
     createNamespace: true
   chart:
@@ -106,4 +107,10 @@ spec:
 git add -A
 git commit -am "added final-chart"
 git push
+```
+
+## Schritt 7: Überprüfen 
+
+```
+flux get helmrelease -A
 ```
