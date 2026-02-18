@@ -112,5 +112,9 @@ git push
 ## Schritt 7: Überprüfen 
 
 ```
+flux get source git
+flux get kustomization -A
 flux get helmrelease -A
+helm list -A
+kubectl -n ns-final-chart get pods
 ```
