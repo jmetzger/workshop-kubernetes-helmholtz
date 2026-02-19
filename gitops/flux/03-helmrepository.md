@@ -79,18 +79,6 @@ kubectl get helmrepository -A
 | `url` | `https://...` | Helm Chart Repository URL |
 | `namespace` | `flux-system` | Namespace wo Flux installiert ist |
 
-## Schritt 3: HelmRepository anwenden
-
-```
-kubectl apply -f 01-helmrepo-traefik.yml
-```
-
-## Schritt 4: Status pruefen
-
-```
-kubectl get helmrepository -n flux-system
-```
-
 **Erwartete Ausgabe:**
 ```
 NAME      URL                                  AGE   READY   STATUS
