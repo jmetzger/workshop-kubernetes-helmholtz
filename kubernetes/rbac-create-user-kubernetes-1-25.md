@@ -102,7 +102,7 @@ subjects:
 ```
 
 ```
-kubectl apply -f rb-training-ns-default-pods.yml
+kubectl apply -f rolebinding.yml
 ```
 
 ### Mini-Schritt 4: Testen (klappt der Zugang) 
