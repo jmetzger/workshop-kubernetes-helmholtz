@@ -378,6 +378,7 @@
     
   1. Kubernetes RBAC (Role based access control)
      * [RBAC Übung kubectl](/kubernetes/rbac-create-user-kubernetes-1-25.md)
+     * [ServiceAccount im pod mit kubectl verwenden](/kubernetes-rbac/pod-mit-kubectl-und-serviceaccount.md)
 
   1. Kubernetes Operator Konzept 
      * [Ueberblick](kubernetes/operator/overview.md)   
