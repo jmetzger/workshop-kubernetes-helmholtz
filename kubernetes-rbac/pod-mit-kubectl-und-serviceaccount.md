@@ -38,6 +38,7 @@ kubectl exec -it tools-pod -- sh
 ```
 # IN DER BASH 
 # Achtung der pod muss das kommando kubectl drin haben
+# Das geht nicht, weil wir dafür keine Rechte haben 
 kubectl cluster-info
 kubectl get pods
 # aus diesem pod heraus einen anderen Pod starten 
