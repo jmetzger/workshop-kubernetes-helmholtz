@@ -57,6 +57,10 @@ kubectl apply -f .
 ### Mini-Schritt 2: ClusterRole festlegen - Dies gilt für alle namespaces, muss aber noch zugewiesen werden
 
 ```
+nano pods-clusterrole.yml
+```
+
+```
 ## Bevor sie zugewiesen ist, funktioniert sie nicht - da sie keinem Nutzer zugewiesen ist 
 
 # vi pods-clusterrole.yml 
