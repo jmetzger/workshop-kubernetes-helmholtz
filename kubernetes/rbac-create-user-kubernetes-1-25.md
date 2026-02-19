@@ -148,7 +148,8 @@ CURRENT   NAME                            CLUSTER            AUTHINFO    NAMESPA
 ```
 
 ```
-kubectl config use-context kubernetes-admin@kubernetes 
+kubectl config use-context kubernetes-admin@kubernetes
+kubectl -n kube-system get pods 
 ```
 
 
