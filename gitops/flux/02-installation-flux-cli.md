@@ -22,7 +22,7 @@ flux completion bash > /etc/bash_completion.d/flux
 
 ```
 # Stimmen die Voraussetzungen ?
-flux check --precheck 
+flux check --pre
 ```
 
 
