@@ -82,6 +82,7 @@ kubectl apply -f pods-clusterrole.yml
 
 ```
 nano rolebinding.yml
+```
 
 ```
 # vi rolebinding.yml
