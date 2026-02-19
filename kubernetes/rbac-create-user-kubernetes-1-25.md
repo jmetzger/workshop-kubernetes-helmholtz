@@ -34,6 +34,10 @@ kubectl apply -f service-account.yml
   * https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#create-token
 
 ```
+nano secret.yml
+```
+
+```
 # vi secret.yml 
 apiVersion: v1
 kind: Secret
