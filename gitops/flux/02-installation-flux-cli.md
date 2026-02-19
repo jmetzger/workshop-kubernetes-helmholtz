@@ -68,7 +68,7 @@ export GITLAB_TOKEN=<dein-personal-access-token>
 
 # Bootstrap für Production-Cluster
 flux bootstrap gitlab \
-  --owner=training-tn<Deine-Teilnehmer-Nr> \
+  --owner=training.tn<Deine-Teilnehmer-Nr> \
   --repository=<Dein-Repo> \
   --branch=main \
   --path=clusters/production \
