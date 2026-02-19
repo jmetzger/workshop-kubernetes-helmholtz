@@ -36,6 +36,7 @@ kubectl exec -it tools-pod -- sh
 ```
 
 ```
+# IN DER BASH 
 # Achtung der pod muss das kommando kubectl drin haben
 kubectl cluster-info
 kubectl get pods
