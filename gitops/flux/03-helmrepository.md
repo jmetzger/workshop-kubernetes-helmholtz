@@ -35,7 +35,7 @@ Wir definieren das Traefik Helm Repository als Quelle:
 
 ```
 mkdir -p clusters/production/infrastructure/sources
-mkdir -p clusster/production/infrastructure/releases
+mkdir -p clusters/production/infrastructure/releases
 mkdir -p clusters/production/apps/sources
 mkdir -p clusters/production/apps/releases 
 
