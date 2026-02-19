@@ -66,6 +66,10 @@
   1. Kubernetes - Überblick
      * [Liste wichtiger/sinnvoller Client-Tools](https://github.com/jmetzger/training-kubernetes-einfuehrung/blob/main/tools/liste-client-tools.md)
 
+
+  1. Kubernetes Installation
+     * [Kubernetes Cluster mit opentofu und bashscripten ausrollen (training-stack)](/training-stack/opentofu-install.md) 
+
   1. Kubernetes - Hochverfügbarkeit
      * [Strategien für Hochverfügbarkeit](kubernetes-ha/strategien-hochverfügbarkeit-kubernetes.md)
     
