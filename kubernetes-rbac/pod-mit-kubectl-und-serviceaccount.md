@@ -2,7 +2,7 @@
 
 ## Prerequisites 
 
-  * Service-Account mit Rechten muss angelegt sein 
+  * Service-Account mit Rechten muss angelegt sein (für die Verwendung innerhalb des Pods. Eintrag in ServiceAccountName) 
 
 ## Walkthrough 
 
