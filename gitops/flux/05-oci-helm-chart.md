@@ -55,6 +55,8 @@ flux get kustomizations
 
 ```
 # das Feld "version" gibt es nicht
+# Welches Feld gibt es denn, unter ref ?
+kubectl explain OCIRepository.spec.ref
 ```
 
 ## Schritt 3: version ändern in tag:
