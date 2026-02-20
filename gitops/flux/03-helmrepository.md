@@ -162,7 +162,6 @@ kubectl annotate helmrepository traefik -n flux-system \
 
 | Aktion | Befehl |
 |--------|--------|
-| HelmRepository erstellen | `kubectl apply -f 01-helmrepo-traefik.yml` |
 | Status pruefen | `kubectl get helmrepository -n flux-system` |
 | Manuell aktualisieren | `flux reconcile source helm traefik` |
 
