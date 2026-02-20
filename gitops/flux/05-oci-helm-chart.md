@@ -66,7 +66,7 @@ nano cloudpirates.yaml
 ``` 
 
 ```
-# oci-cloudpirates.yaml
+# vi cloudpirates.yaml
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
