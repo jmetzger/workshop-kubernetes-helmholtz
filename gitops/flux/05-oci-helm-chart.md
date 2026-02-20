@@ -148,6 +148,8 @@ kubectl describe pods mariadb
 ## Schritt 7: csi nfs treiber installieren und einrichten
 
 ```
+cd
+cd install
 cat helmfile-csi-nfs.yaml
 helmfile -f helmfile-csi-nfs.yaml sync
 ```
