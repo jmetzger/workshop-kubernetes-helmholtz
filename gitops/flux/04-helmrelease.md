@@ -104,7 +104,7 @@ in artifacthub.io
 ### Schritt 6: values korrigieren 
 
 ```
-nano infrastructure/releases/traefik.yml
+nano traefik.yml
 ```
 
 ```
