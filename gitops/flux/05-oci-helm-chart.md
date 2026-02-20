@@ -108,8 +108,6 @@ kubectl -n flux-system get ocirepositories
 
 ```
 cd
-# Falls noch nicht existent, tut aber auch ansonsten nicht weh !
-mkdir -p manifests/flux/clusters/production/app/releases 
 cd manifests/flux/clusters/production/apps/releases
 nano mariadb.yaml
 ```
