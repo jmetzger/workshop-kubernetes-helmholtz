@@ -139,7 +139,7 @@ git push
 ```
 flux get sources git
 flux get kustomizations
-flux get helmreleases 
+flux get helmreleases -A
 kubectl get pods
 # Was ist das Problem ?
 kubectl describe pods mariadb
