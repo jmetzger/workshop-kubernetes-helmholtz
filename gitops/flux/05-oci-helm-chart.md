@@ -9,7 +9,7 @@
 ```
 cd
 # Falls noch nicht existent, tut aber auch ansonsten nicht weh !
-mkdir -p manifests/flux/clusters/production/app/sources 
+mkdir -p manifests/flux/clusters/production/apps/sources 
 cd manifests/flux/clusters/production/apps/sources
 nano cloudpirates.yaml 
 ``` 
