@@ -140,6 +140,8 @@ git push
 ```
 flux get source git
 kubectl -n ingress get helmrelease traefik
+helm -n ingress list 
+helm -n ingress history traefik
 helm -n ingress get values traefik
 ```
 
