@@ -48,7 +48,7 @@ metadata:
   name: webapp
   namespace: probe-demo
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: webapp
