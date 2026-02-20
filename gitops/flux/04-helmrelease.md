@@ -157,7 +157,6 @@ kubectl get helmrelease traefik -n ingress -o yaml | grep -A 10 status
 ```
 
 **Wichtige Informationen:**
-- `lastAppliedRevision` - Chart Version die installiert wurde
 - `lastAttemptedRevision` - Letzte versuchte Version
 - `conditions` - Status der Reconciliation
 
