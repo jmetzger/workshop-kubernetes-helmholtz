@@ -101,7 +101,7 @@ traefik:
 in artifacthub.io
 ```
 
-### Schritt 6: values korrigieren 
+## Schritt 6: values korrigieren 
 
 ```
 nano traefik.yml
