@@ -95,6 +95,13 @@ watch flux get kustomizations
 # << raus kommt ihr wieder mit CTRL+C 
 ```
 
+```
+# ist ociregistry da ?
+kubectl -n flux-system get ocirepositories
+```
+
+
+
 ## Schritt 4: HelmRelease anlegen 
 
    * version wird hier nicht verwendet, weil das bereits im OCIRepository ist.
