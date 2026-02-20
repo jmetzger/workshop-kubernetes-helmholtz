@@ -14,7 +14,9 @@ helm create final-chart
 ## Schritt 2: Repo einrichten 
 
   * Achtung: Repo muss leer sein
-  * URL rauskopieren, z.B. https://gitlab.com/training-tn<nr>/final-chart-<dein-kuerzel>.git
+```
+URL rauskopieren, z.B. https://gitlab.com/training.tn<nr>/final-chart-<dein-kuerzel>.git
+```
 
 
 ## Schritt 3: lokal git initialisieren und pushen
