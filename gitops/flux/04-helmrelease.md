@@ -22,8 +22,8 @@
 
 ```
 cd
-mkdir -p manifests/flux/infrastructure/releases
-cd manifests/flux/infrastructure/releases 
+mkdir -p manifests/flux/clusters/production/infrastructure/releases
+cd manifests/flux/clusters/production/infrastructure/releases 
 ```
 
 ## Schritt 2: HelmRelease fuer traefik erstellen
