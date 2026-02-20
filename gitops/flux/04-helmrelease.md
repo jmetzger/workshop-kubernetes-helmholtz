@@ -31,7 +31,7 @@ cd manifests/flux/infrastructure/releases
 Wir rollen traefik aus dem traefik Repository aus:
 
 ```
-nano infrastructure/releases/traefik.yml
+nano traefik.yml
 ```
 
 ```
