@@ -35,7 +35,7 @@ nano traefik.yml
 ```
 
 ```
-# vi infrastructure/releases/traefik.yml
+# vi traefik.yml
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
