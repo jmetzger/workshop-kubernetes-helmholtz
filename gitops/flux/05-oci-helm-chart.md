@@ -137,6 +137,8 @@ git push
 ## Schritt 6: War die installation für mariadb - erfolgreich ?
 
 ```
+flux get sources git
+flux get kustomizations
 flux get helmreleases 
 kubectl get pods
 # Was ist das Problem ?
