@@ -1,24 +1,57 @@
-# Kubernetes Einführung
+# Workshop Kubernetes / docker / Helm / FluxCD 
 
 
 ## Agenda
-  1. Docker-Grundlagen 
+ 1. Docker-Grundlagen 
      * [Übersicht Architektur](#übersicht-architektur)
      * [Was ist ein Container ?](#was-ist-ein-container-)
      * [Was sind container images](#was-sind-container-images)
      * [Container vs. Virtuelle Maschine](#container-vs-virtuelle-maschine)
      * [Was ist ein Dockerfile](#was-ist-ein-dockerfile)
-     * [Dockerfile - image kleinhalten](#dockerfile---image-kleinhalten)
-
-  1. Kubernetes Installation
-     * [Kubernetes Installation mit Proxmox und kubespray](#kubernetes-installation-mit-proxmox-und-kubespray)
-    
-  1. Kubernetes Workloads
-     * [Welche Wege gibt es Kubernetes Workloads auszurollen](#welche-wege-gibt-es-kubernetes-workloads-auszurollen)
-    
-  1. Kubernetes Infrastructure (Performance)
-     * [Performance of etcd for setup](#performance-of-etcd-for-setup)
-    
+  
+  1. Docker-Installation
+     * [BEST for Ubuntu : Install Docker from Docker Repo](#best-for-ubuntu--install-docker-from-docker-repo)
+  
+  1. Docker-Befehle 
+     * [Die wichtigsten Befehle](#die-wichtigsten-befehle)
+     * [Logs anschauen - docker logs - mit Beispiel nginx](#logs-anschauen---docker-logs---mit-beispiel-nginx)
+     * [docker run](#docker-run)
+     * [Docker container/image stoppen/löschen](#docker-containerimage-stoppenlöschen)
+     * [Docker containerliste anzeigen](#docker-containerliste-anzeigen)
+     * [Docker nicht verwendete Images/Container löschen](#docker-nicht-verwendete-imagescontainer-löschen)
+     * [Docker container analysieren](#docker-container-analysieren)
+     * [Docker container in den Vordergrund bringen - attach](#docker-container-in-den-vordergrund-bringen---attach)
+     * [Aufräumen - container und images löschen](#aufräumen---container-und-images-löschen)
+     * [Nginx mit portfreigabe laufen lassen](#nginx-mit-portfreigabe-laufen-lassen)
+  
+  1. Dockerfile - Examples
+     * [Docker image klein halten](#docker-image-klein-halten)
+     * [Ubuntu mit hello world](#ubuntu-mit-hello-world)
+     * [Ubuntu mit ping](#ubuntu-mit-ping)
+     * [Nginx mit content aus html-ordner](#nginx-mit-content-aus-html-ordner)
+  
+  1. Docker-Netzwerk 
+     * [Netzwerk](#netzwerk)
+  
+  1. Docker-Container Examples 
+     * [2 Container mit Netzwerk anpingen](#2-container-mit-netzwerk-anpingen)
+     * [Container mit eigenem privatem Netz erstellen](#container-mit-eigenem-privatem-netz-erstellen)
+  
+  1. Docker-Daten persistent machen / Shared Volumes 
+     * [Überblick](#überblick)
+     * [Volumes](#volumes)
+     * [bind-mounts](#bind-mounts)
+     * [bind-mounts-permissions](#bind-mounts-permissions)
+     
+  1. Docker Compose
+     * [yaml-format](#yaml-format)
+     * [Ist docker-compose installiert?](#ist-docker-compose-installiert)
+     * [Example with Wordpress / Nginx / MariadB](#example-with-wordpress--nginx--mariadb)
+     * [Example with Ubuntu and Dockerfile](#example-with-ubuntu-and-dockerfile)
+     * [Logs in docker - compose](#logs-in-docker---compose)
+     * [docker-compose und replicas](#docker-compose-und-replicas)
+     * [docker compose Reference](https://docs.docker.com/compose/compose-file/compose-file-v3/)
+      
   1. Kubernetes - Überblick
      * [Warum Kubernetes, was macht Kubernetes](#warum-kubernetes-was-macht-kubernetes)
      * [Aufbau Allgemein](#aufbau-allgemein)
@@ -32,6 +65,10 @@
 
   1. Kubernetes - Überblick
      * [Liste wichtiger/sinnvoller Client-Tools](https://github.com/jmetzger/training-kubernetes-einfuehrung/blob/main/tools/liste-client-tools.md)
+
+
+  1. Kubernetes Installation
+     * [Kubernetes Cluster mit opentofu und bashscripten ausrollen (training-stack)](#kubernetes-cluster-mit-opentofu-und-bashscripten-ausrollen-training-stack)
 
   1. Kubernetes - Hochverfügbarkeit
      * [Strategien für Hochverfügbarkeit](#strategien-für-hochverfügbarkeit)
@@ -102,6 +139,9 @@
      * [Exercise Sealed Secret mariadb](#exercise-sealed-secret-mariadb)
      * [registry mit secret auth](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
+  1. Alternativen zu bitnami - sealedsecrets
+     * [Openbao - Fork von Hashicorp Vault](https://openbao.org/)
+
   1. Kubernetes API-Objekte (Teil 2)
      *  [Jobs](kubectl-examples/12-job.md)
      *  [Cronjobs](kubectl-examples/11-cronjob.md)
@@ -118,6 +158,9 @@
      * [Pod with unprivilged user](#pod-with-unprivilged-user)
      * [Pod ohne capabilities starten. Funktioniert !](#pod-ohne-capabilities-starten-funktioniert-!)
 
+  1. ResourceQuota / LimitRange
+     * [ResourceQuota - Ressourcen pro Namespace begrenzen](#resourcequota---ressourcen-pro-namespace-begrenzen)
+
   1. Helm (Kubernetes Paketmanager)
      * [Helm - Was kann Helm](#helm---was-kann-helm)
      * [Helm Grundlagen](#helm-grundlagen)
@@ -127,6 +170,63 @@
      * [Installation, Upgrade, Uninstall helm-Chart exercise (wordpress-groundhog2k)](#installation-upgrade-uninstall-helm-chart-exercise-wordpress-groundhog2k)
      * [Helm Exercise with nginx](#helm-exercise-with-nginx)
      * [Helm Spickzettel](#helm-spickzettel)
+
+   1. Arbeiten mit helm - charts (Debugging)
+     * [Nur fertiges manifest ausgeben ohne Installation](#nur-fertiges-manifest-ausgeben-ohne-installation)
+     * [Chart trocken testen gegen api-server ohne Installation --dry-run](#chart-trocken-testen-gegen-api-server-ohne-installation---dry-run)
+
+  1. Helm Internals
+     * [Helm template - Rendering Prozess](#helm-template---rendering-prozess)
+     * [helm vs. kubectl vs. oc](#helm-vs-kubectl-vs-oc)
+
+  1. Helm - best practices
+     * [Wann quotes in yaml und in resources  (Kubernetes/OCP)](#wann-quotes-in-yaml-und-in-resources--kubernetesocp)
+     * [Gute Struktur für Values und Charts](#gute-struktur-für-values-und-charts)
+     * [Best Practices for Chart Templating](https://helm.sh/docs/chart_best_practices/)
+
+  1. Helm - Advanced
+     * [Helm Dependencies Exercise](#helm-dependencies-exercise)
+    
+  1. Helm - Good structure, using umbrella chart 
+     * [Exercise helm umbrella chart](#exercise-helm-umbrella-chart)
+
+  1. Helm Grundlagen
+     * [TopLevel Objekte](#toplevel-objekte)
+      
+  1. Helm Charts entwickeln
+     * [eigenes helm chart erstellen (Gruppe)](#eigenes-helm-chart-erstellen-gruppe)
+     * [Wie starte ich am besten ganz einfach - Übung](#wie-starte-ich-am-besten-ganz-einfach---übung)
+
+  1. Spezial: Umgang mit Einrückungen
+     * [Whitespaces meistern mit "-"](#whitespaces-meistern-mit-"-")
+     * [Exercise Whitespaces](#exercise-whitespaces)
+
+  1. Type - Conversions
+     * [Exercise toYaml](#exercise-toyaml)
+     * [Exercise toYaml - with app deployoment resources](#exercise-toyaml---with-app-deployoment-resources)
+    
+  1. Flow Control
+     * [if](#if)
+     * [if - render only on condition (HPA)](#if---render-only-on-condition-hpa)
+     * [with](#with)
+     * [range](#range)
+
+  1. Named Templates
+     *  [named template](helm/exercises/10-named-template.md)
+     *  [named template with dict](/helm/exercises/11-named-template-with-dict.md)
+    
+  1. Helm - Fehlerhandling 
+     * [Fehlerbehandlung mit require - url muss gesetzt werden](#fehlerbehandlung-mit-require---url-muss-gesetzt-werden)
+    
+  1. Helm mit gitlab ci/cd
+     * [Helm mit gitlab ci/cd ausrollen](#helm-mit-gitlab-cicd-ausrollen)
+
+  1. Metrics - Server
+     * [Metrics - Server mit helm installieren und verwenden](#metrics---server-mit-helm-installieren-und-verwenden)
+    
+  1. helm - Dokumentation
+     * [Helm Documentation](https://helm.sh/docs/)
+     * [Built in TopLevel - Objects like .Release](https://helm.sh/docs/chart_template_guide/builtin_objects/)
     
   1. Helm Charts erstellen und analysieren
      * [Eigenes Helm-Chart erstellen](#eigenes-helm-chart-erstellen)
@@ -134,6 +234,14 @@
 
   1. Helm - Fehleranalye
      * [Beispiel Cloudpirates - helm chart nginx](#beispiel-cloudpirates---helm-chart-nginx)
+
+  1. GitOps mit Flux
+     * [Flux Ueberblick - Controller, CRDs und Ablauf](#flux-ueberblick---controller-crds-und-ablauf)
+     * [Flux Installation mit flux-cli](#flux-installation-mit-flux-cli)
+     * [HelmRepository - Helm Chart Repositories verwalten](#helmrepository---helm-chart-repositories-verwalten)
+     * [HelmRelease - Helm Charts deklarativ ausrollen](#helmrelease---helm-charts-deklarativ-ausrollen)
+     * [OCI-Helm-Chart verwalten an Beispiel Cloudimages / mariadb](#oci-helm-chart-verwalten-an-beispiel-cloudimages--mariadb)
+     * [Eigenes Chart erstellen und deployen](#eigenes-chart-erstellen-und-deployen)
 
   1. Helpful plugins
      * [Use shortnames for kubectl - commands](https://gist.github.com/doevelopper/ff4a9a211e74f8a2d44eb4afb21f0a38)
@@ -175,8 +283,16 @@
   1. Tipps & Tricks
      * [Pods bleiben im terminate-mode stehen](#pods-bleiben-im-terminate-mode-stehen)
      
-
 ## Backlog 
+
+  1. Kubernetes Installation
+     * [Kubernetes Installation mit Proxmox und kubespray](#kubernetes-installation-mit-proxmox-und-kubespray)
+    
+  1. Kubernetes Workloads
+     * [Welche Wege gibt es Kubernetes Workloads auszurollen](#welche-wege-gibt-es-kubernetes-workloads-auszurollen)
+    
+  1. Kubernetes Infrastructure (Performance)
+     * [Performance of etcd for setup](#performance-of-etcd-for-setup)
 
   1. Podman
      * [Podman vs. Docker](#podman-vs-docker)
@@ -261,8 +377,10 @@
      * [Änderung in ConfigMap erkennen und anwenden](https://github.com/stakater/Reloader)
     
   1. Kubernetes RBAC (Role based access control)
+     * [Überblick, welche Rechte können gesetzt werden](#überblick-welche-rechte-können-gesetzt-werden)
      * [RBAC Übung kubectl](#rbac-übung-kubectl)
-
+     * [ServiceAccount im pod mit kubectl verwenden](#serviceaccount-im-pod-mit-kubectl-verwenden)
+   
   1. Kubernetes Operator Konzept 
      * [Ueberblick](#ueberblick)
     
@@ -461,8 +579,6 @@
 
 <div class="page-break"></div>
 
-## Docker-Grundlagen 
-
 ### Übersicht Architektur
 
 
@@ -527,129 +643,1001 @@ CMD ["node", "src/index.js"]
 EXPOSE 3000
 ```
 
-### Dockerfile - image kleinhalten
+## Docker-Installation
+
+### BEST for Ubuntu : Install Docker from Docker Repo
 
 
-  * Delete all files that are not needed in image 
-
-### Example 
+### Walkthrough 
 
 ```
-### Delete files needed for installation
-### Right after the installation of the necessary 
-## Variante 2
-## nano Dockerfile
-FROM ubuntu:22.04
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+### Läuft der Dienst (dockerd) 
+
+```
+systemctl status docker 
+```
+
+### docker compose ? 
+
+```
+## herausfinden, ob docker compose installieren 
+docker compose version 
+```
+
+## Docker-Befehle 
+
+### Die wichtigsten Befehle
+
+
+```
+## docker hub durchsuchen
+docker search hello-world
+
+docker run <image>
+## z.b. // Zieht das image aus docker hub 
+## hub.docker.com 
+docker run hello-world
+
+## images die lokal vorhanden 
+docker images 
+
+## container (laufende) 
+docker container ls 
+## container (vorhanden, aber beendet)
+docker container ls -a
+## als alternative
+docker ps
+## als alternative (vorhande aber beendet)
+docker ps -a
+
+## z.b hilfe für docker run 
+docker help run 
+
+ 
+
+
+```
+
+### Logs anschauen - docker logs - mit Beispiel nginx
+
+
+### Allgemein 
+```
+## Erstmal nginx starten und container-id wird ausgegeben 
+docker run --name my-nginx -d nginx 
+a234
+docker logs a234 # a234 sind die ersten 4 Ziffern der Container ID 
+```
+
+### Laufende Log-Ausgabe 
+
+```
+docker logs -f a234 
+## Abbrechen CTRL + c 
+```
+
+### docker run
+
+
+### Beispiel (binden an ein terminal), detached
+
+```
+## optional, docker run does the same 
+docker pull ubuntu:resolute # resolute ist 26.04
+docker images 
+docker run -t -d --name my-newubuntu ubuntu:resolute
+## will wollen überprüfen, ob der container läuft
+docker container ls 
+## image vorhanden 
+docker images
+
+## in den Container reinwechsel 
+docker exec -it my-newubuntu bash
+```
+
+```
+## in der bash
+cat /etc/os-release
+exit
+```
+
+
+```
+docker exec my-newubuntu cat /etc/os-release 
+```
+
+### umschauen logs 
+
+```
+docker run --name log-nginx -d nginx
+docker exec -it log-nginx bash
+```
+
+```
+cd /var/log/nginx
+## alles auf /dev/stdout und /dev/stderr 
+ls -la 
+```
+
+### Beispiele direkte Kommandos 
+
+```
+## kommando was nur in der bash existiert cd
+docker run --name log-nginx2 -d nginx
+docker exec log-nginx2 bash -c "cd /etc; ls -la"
+
+docker exec log-nginx ls -la /var/log/nginx
+```
+
+### Docker container/image stoppen/löschen
+
+
+```
+docker run -t -d --name ubuntu-container ubuntu:resolute
+docker stop ubuntu-container 
+## Kill it if it cannot be stopped -be careful
+docker start ubuntu-container 
+docker kill ubuntu-container
+
+## Get nur, wenn der Container nicht mehr läuft 
+docker rm ubuntu-container
+
+docker run -t -d --name ubuntu-container ubuntu:resolute
+## oder alternative
+docker rm -f ubuntu-container 
+
+
+## image löschen 
+docker rmi ubuntu:resolute 
+
+## falls Container noch vorhanden aber nicht laufend
+docker rmi -f ubuntu:resolute 
+
+```
+
+### Docker containerliste anzeigen
+
+
+```
+## besser 
+docker container ls 
+## Alle Container, auch die, die beendet worden sind 
+docker container ls -a 
+
+
+## deprecated 
+docker ps 
+## -a auch solche die nicht mehr laufen 
+docker ps -a
+
+
+
+```
+
+### Docker nicht verwendete Images/Container löschen
+
+
+```
+## mit Nachfrage 
+docker system prune
+docker system prune -f  
+## Löscht möglicherweise nicht alles
+
+## d.h. danach nochmal prüfen ob noch images da sind
+docker images 
+## und händisch löschen 
+docker rmi <image-name>
+
+```
+
+### Docker container analysieren
+
+
+```
+docker run -d --name hello-web hello-world
+docker ps -a 
+docker inspect hello-web # hello-web = container name 
+```
+
+```
+docker run -d --name nginxly nginx
+docker ps -a
+## ip abfragen 
+docker inspect nginxly | grep -i ipad 
+``` 
+
+### Docker container in den Vordergrund bringen - attach
+
+
+### docker attach - walkthrough 
+
+```
+docker run -d ubuntu 
+1a4d...
+
+docker attach 1a4d 
+
+## Es ist leider mit dem Aufruf run nicht möglich, den prozess wieder in den Hintergrund zu bringen 
+
+```
+
+### interactiven Prozess nicht beenden (statt exit) 
+
+```
+docker run -it ubuntu bash  
+## ein exit würde jetzt den Prozess beenden
+## exit
+
+## Alternativ ohne beenden (detach) 
+## Geht aber nur beim start mit run -it 
+CTRL + P, dann CTRL + Q 
+
+```
+
+### Reference: 
+
+  * https://docs.docker.com/engine/reference/commandline/attach/
+
+### Aufräumen - container und images löschen
+
+
+### Alle nicht verwendeten container und images löschen 
+
+```
+## Alle container, die nicht laufen löschen 
+docker container prune 
+
+## Alle images, die nicht an eine container gebunden sind, löschen 
+docker image prune 
+
+## container händisch, gleich viel am Stück
+docker rm -f 9c 58 b0 45 d8 4b
+
+```
+
+### Nginx mit portfreigabe laufen lassen
+
+
+```
+docker run --name test-nginx -d -p 8080:80 nginx
+
+docker container ls
+lsof -i
+cat /etc/services | grep 8080
+curl http://localhost:8080
+docker container ls
+## wenn der container gestoppt wird, keine ausgabe mehr, weil kein webserver
+docker stop test-nginx 
+curl http://localhost:8080
+
+
+```
+
+### Jeder port kann nur 1x vergeben werden
+
+```
+docker start test-nginx
+
+## Gemecker ist gross, weil Port schon vergeben
+docker run --name test-nginx2 -d -p 8080:80 nginx
+```
+
+## Dockerfile - Examples
+
+### Docker image klein halten
+
+
+### Übung - Schritt 1
+
+```
+cd
+mkdir buildtest
+cd buildtest
+```
+
+```
+nano Dockerfile
+```
+
+```
+FROM ubuntu:24.04
+RUN apt-get update && \
+    apt-get install -y inetutils-ping
+```
+
+```
+docker build -t ubuntu-ping .
+```
+
+
+### Übung: Schritt 2:
+
+```
+## Dockerfile anpassen
+FROM ubuntu:24.04
 RUN apt-get update && \
     apt-get install -y inetutils-ping && \
     rm -rf /var/lib/apt/lists/*
-## CMD ["/bin/bash"]
-
-```
-
-### Example 2: Start from scratch 
-
- * https://codeburst.io/docker-from-scratch-2a84552470c8
-
-
-## Kubernetes Installation
-
-### Kubernetes Installation mit Proxmox und kubespray
-
-
-### Schritt 1: virtuellen Maschine deployen 
-
-  * 4GB (control nodes eher 8GB) - minimaler Arbeitsspeicher
-  * Debian als Betriebssystem
-  * minimale Installation
-  * ssh-server installiert (openssh-server)
-  * sudo benutzer ohne Passwort für privilege Escalation (z.B. admin darf als root arbeiten)
-
-### Info 1.1 Netzwerk 
-
-   * Alle virtuellen Maschinen im gleichen Netzwerk (kein VLAN)
-   * Kubernetes mit eigenem VLAN
-   * Alternativ neuerdings: mit SDN (Performance beobachten !)
-
-### Schritt 2: maschine für ansible deployen/nutzen 
-
-   * private/public key erstellen und den public auf die maschinen aus Schritt 1 verteilen
-   * ansible und git installieren
-   * kubespray clonen oder docker image verwenden (dann braucht man kein ansible installieren)
-   * apt update -y; apt install docker.io -y
-   * Inventory rauskopieren und anpassen
-
-```
-[all]
-## Master/Control Plane Node
-kube-master ansible_host=192.168.1.10
-## Worker Nodes
-kube-worker1 ansible_host=192.168.1.11
-kube-worker2 ansible_host=192.168.1.12
-
-[kube_control_plane]
-kube-master
-
-[etcd]
-kube-master
-
-[kube_node]
-kube-worker1
-kube-worker2
 ```
 
 ```
-## evtl config anpassen vornehmen in den group vars
+docker build -t ubuntu-ping-small .
+docker images
+```
+
+
+
+
+### Ubuntu mit hello world
+
+
+```
+### Schritt 1:
+cd 
+mkdir Hello-World 
+
+
+### Schritt 2:
+## nano Dockerfile
+FROM ubuntu:latest 
+
+COPY hello.sh .
+RUN chmod u+x hello.sh
+CMD ["/hello.sh"]
+
+### Schritt 3:
+nano hello.sh 
+##!/bin/bash
+echo hello-docker
+
+### Schritt 4:
+## docker build -t dockertrainereu/<dein-name>-hello-docker . 
+## Beispiel
+docker build -t dockertrainereu/jm-hello-docker .
+docker run dockertrainereu/<dein-name>-hello-docker 
+
+docker login
+user: dockertrainereu 
+pass: --bekommt ihr vom trainer--
+
+## docker push dockertrainereu/<dein-name>-hello-docker 
 ## z.B. 
-https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
-```
+docker push dockertrainereu/jm-hello-docker
+
+## und wir schauen online, ob wir das dort finden
 
 ```
-ansible-playbook -i inventory/mycluster/ cluster.yml -b -v \
-  --private-key=~/.ssh/private_key
-```
 
-```
-## zum hostsystem verbinden und die kubeconfig
-## in der Regel
-cd /home/<user-mit-dem-ich-installiert-habe>/.kube
-cat config
-```
-
-
-
-## Kubernetes Workloads
-
-### Welche Wege gibt es Kubernetes Workloads auszurollen
-
-
-  * gitlab ci/cd
-  * github actions
-  * bitbucket + jenkings
-  * ArgoCD
-  * Flux
-  * helm/helmfile
-
-### Grafik 
-
-<img width="1297" height="820" alt="image" src="https://github.com/user-attachments/assets/0593d586-3888-40a4-81a7-5dce1d8af63b" />
-
-## Kubernetes Infrastructure (Performance)
-
-### Performance of etcd for setup
+### Ubuntu mit ping
 
 
 ```
-etcdctl check perf --load="s"
-(s steht für small: 
-
-https://andreaskaris.github.io/blog/openshift/etcd_perf/
-The performance check's workload model. Accepted workloads: s(small), m(medium), l(large), xl(xLarge)
+mkdir myubuntu 
+cd myubuntu/
 
 
+## nano Dockerfile
+FROM ubuntu:latest
+RUN apt-get update; apt-get install -y inetutils-ping
+CMD ["/bin/bash"]
+
+
+
+docker build -t myubuntu .
+docker images
+## -t wird benötigt, damit bash WEITER im Hintergrund im läuft.
+## auch mit -d (ohne -t) wird die bash ausgeführt, aber "das Terminal" dann direkt beendet 
+## -> container läuft dann nicht mehr 
+docker run -d -t --name container-ubuntu myubuntu
+docker container ls
+## in den container reingehen mit dem namen des Containers: myubuntu 
+docker exec -it myubuntu bash
+ls -la
+ 
+ 
+## Zweiten Container starten
+docker run -d -t --name container-ubuntu2 myubuntu 
+
+## Ersten Container -> 2. anpingen 
+docker exec -it container-ubuntu bash 
+## Jeder container hat eine eigene IP 
+ping 172.17.0.3
+
+ 
+```
+
+### Nginx mit content aus html-ordner
+
+
+### Schritt 1: Simple Example 
+
+```
+## das gleich wie cd ~
+## Heimatverzeichnis des Benutzers root 
+cd
+mkdir -p nginx-test/html
+cd nginx-test/html
+## vi index.html
+nano index.html
+```
+
+```
+Text, den du rein haben möchtest
+``` 
+
+```
+cd ..
+nano Dockerfile
+``` 
+
+```
+FROM nginx:latest
+COPY html /usr/share/nginx/html
+```
+
+```
+## nameskürzel z.B. jm1 
+docker build -t dockertrainereu/<dein-namenskuerzel>-hello-web . 
+docker images
+```
+
+
+### Schritt 2: Push build 
+
+```
+
+## eventually you are not logged in 
+docker login -u dockertrainereu
+docker push dockertrainereu/<dein-namenskuerzel>-hello-web 
+##aus spass geloescht
+docker rmi dockertrainereu/<dein-namenskuerzel>-hello-web
+
+```
+
+### Schritt 3: docker laufen lassen
+
+```
+## sicherstellen, dass kein Alter container mit dem läuft
+docker container ls -a | grep hello-web
+## ansonsten
+docker rm -f hello-web
+```
+
+```
+## und direkt aus der Registry wieder runterladen 
+docker run --name hello-web -p 8081:80 -d dockertrainereu/<dein-namenskuerzel>-hello-web
+
+## laufenden Container anzeigen lassen
+docker container ls  
+docker ps 
+
+curl http://localhost:8081 
+
+
+## 
+docker rm -f hello-web 
+
+```
+
+## Docker-Netzwerk 
+
+### Netzwerk
+
+
+### Übersicht
+
+```
+3 Typen 
+
+o none
+o bridge (Standard-Netzwerk) 
+o host 
+
+### Additionally possible to install
+o overlay (needed for multi-node)
+
+```
+
+
+### Kommandos 
+
+```
+## Netzwerk anzeigen 
+docker network ls 
+
+## bridge netzwerk anschauen 
+## Zeigt auch ip der docker container an  
+docker inspect bridge
+
+## im container sehen wir es auch
+docker inspect ubuntu-container 
+
+```
+
+### Eigenes Netz erstellen 
+
+```
+docker network create -d bridge test_net 
+docker network ls 
+
+docker container run -d --name nginx --network test_net nginx
+docker container run -d --name nginx_no_net --network none nginx 
+
+docker network inspect none 
+docker network inspect test_net 
+
+docker inspect nginx 
+docker inspect nginx_no_net 
+
+```
+
+### Netzwerk rausnehmen / hinzufügen 
+
+```
+docker network disconnect none nginx_no_net
+docker network connect test_net nginx_no_net 
+
+### Das Löschen von Netzwerken ist erst möglich, wenn es keine Endpoints 
+### d.h. container die das Netzwerk verwenden 
+docker network rm test_net 
+```
+
+
+
+## Docker-Container Examples 
+
+### 2 Container mit Netzwerk anpingen
 
 
 ```
+clear
+docker run --name dockerserver1 -dit ubuntu
+docker run --name dockerserver2 -dit ubuntu
+docker network ls
+docker network inspect bridge
+## dockerserver1 - 172.17.0.2
+## dockerserver2 - 172.17.0.3
+docker container ls
+docker exec -it dockerserver1 bash
+## im container 
+apt update; apt install -y iputils-ping 
+ping 172.17.0.3 
+```
+
+### Container mit eigenem privatem Netz erstellen
+
+
+### Schritt 1: Netzwerk anlegen und 2. Netzwerk hinzufügen 
+
+```
+## use bridge as type
+## docker network create -d bridge test_net
+## but bridge is default 
+docker network create test_net
+docker network ls
+docker network inspect test_net
+
+## Container mit netzwerk starten 
+docker container run -d --name nginx1 --network test_net nginx
+docker network inspect test_net
+
+## Weiteres Netzwerk (bridged) erstellen
+docker network create demo_net
+docker network connect demo_net nginx1
+
+## Analyse 
+docker network inspect demo_net
+docker inspect nginx1
+
+## Verbindung lösen 
+docker network disconnect demo_net nginx1
+
+## Schauen, wir das Netz jetzt aussieht 
+docker network inspect demo_net
+
+```
+
+### Schritt 2: anpingen von neuem Container 
+
+```
+docker run -it --rm busybox
+```
+
+```
+## anpingen des pods aus schritt 2
+ping -c4 172.18.0.2
+exit 
+``` 
+
+### Schritt 3: anpingen von container im gleichen netzwerk 
+
+```
+docker run -it --rm --network test_net busybox 
+```
+
+```
+## anpingen des pods aus schritt 2
+ping -c4 172.18.0.2
+exit
+```
+
+## Docker-Daten persistent machen / Shared Volumes 
+
+### Überblick
+
+
+### Overview 
+
+```
+bind-mount  # not recommended 
+volumes
+tmpfs 
+```
+
+### Holzauge sei wachsam, geht nicht in Kubernetes. 
+
+```
+stored only on one node
+Does not work well in cluster
+```
+
+### Alternative for cluster 
+
+```
+glusterfs
+cephfs 
+nfs 
+
+## Stichwort
+ReadWriteMany 
+```
+
+### Volumes
+
+
+### Storage volumes verwalten 
+
+```
+docker volume ls
+docker volume create test-vol
+docker volume ls
+docker volume inspect test-vol
+```
+
+### Storage volumes in container einhängen
+
+```
+docker run -it --name=container-test-vol --mount target=/test_data,source=test-vol ubuntu bash
+```
+
+```
+## in der bash 
+touch /test_data/README 
+exit
+## stops container 
+```
+
+```
+## create new container and check for /test_data/README 
+docker run -it --name=container-test-vol2 --mount target=/test_data,source=test-vol ubuntu bash
+```
+
+```
+## In der bash 
+ls -la /test_data/README
+exit
+```
+
+### Storage volume löschen 
+
+```
+## Zunächst container löschen 
+docker rm container-test-vol 
+docker rm container-test-vol2
+docker volume rm test-vol
+```
+
+### bind-mounts
+
+
+
+### Example 1 
+
+```
+## andere Verzeichnis als das Heimatverzeichnis von root funktionieren aktuell nicht mit 
+## snap install docker 
+## wg. des Confinements 
+docker run -d -it  --name devtest --mount type=bind,source=/root,target=/app nginx:latest
+docker exec -it devtest bash 
+/# cd /app 
+```
+
+### bind-mounts-permissions
+
+
+### Step: 1
+
+```
+## als unpriviligierter Nutzer kurs 
+cd
+mkdir -p /home/kurs/nginx/html 
+cd /home/kurs/nginx/html
+echo "hallo welt" > index.html 
+sestatus
+docker run --rm -it --mount type=bind,source=/home/kurs/nginx/html,target=/usr/share/nginx/html --name=nginx-test nginx bash
+exit
+```
+
+### Step: 2
+
+```
+## Adjust permissions 
+cd /home/kurs/nginx/
+sudo chown -R kurs:kurs html
+## Neue Verzeichnisse und Dateien werden mit der Gruppe kurs angelegt
+chmod -R g+s html
+setfacl -d -m g::rwx html
+docker run --rm -it --mount type=bind,source=/home/kurs/nginx/html,target=/usr/share/nginx/html --name=nginx-test nginx bash
+## in container
+cd /usr/share/nginx/html
+mkdir rootdata
+cd rootdata
+touch foo
+
+```
+
+## Docker Compose
+
+### yaml-format
+
+
+```
+## Kommentare 
+
+## Listen 
+- rot
+- gruen
+- blau 
+
+## Mappings 
+Version: 3.7 
+
+## Mappings können auch Listen enthalten 
+expose: 
+  - "3000"
+  - "8000" 
+
+## Verschachtelte Mappings 
+build:
+  context: .
+  labels: 
+    label1: "bunt"
+    label2: "hell" 
+
+```
+
+### Ist docker-compose installiert?
+
+
+```
+## besser. mehr infos
+docker compose version 
+docker compose --version 
+
+```
+
+### Example with Wordpress / Nginx / MariadB
+
+
+### Schritt 1: Installieren 
+
+```
+cd
+mkdir wp 
+cd wp
+```
+
+``` 
+nano docker-compose.yml 
+```
+
+```
+services:
+    database:
+        image: mysql:8.0
+        volumes:
+            - database_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: mypassword
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: wordpress
+            MYSQL_PASSWORD: wordpress
+
+    wordpress:
+        image: wordpress:latest
+        depends_on:
+            - database
+        ports:
+            - 8080:80
+        restart: always
+        environment:
+            WORDPRESS_DB_HOST: database:3306
+            WORDPRESS_DB_USER: wordpress
+            WORDPRESS_DB_PASSWORD: wordpress
+        volumes:
+            - wordpress_plugins:/var/www/html/wp-content/plugins
+            - wordpress_themes:/var/www/html/wp-content/themes
+            - wordpress_uploads:/var/www/html/wp-content/uploads
+volumes:
+    database_data:
+    wordpress_plugins:
+    wordpress_themes:
+    wordpress_uploads:
+```
+
+```
+### now start the system being in the folder *wp*
+docker compose up -d
+docker compose ps
+```
+
+### Schritt 2: Netzwerk testen 
+
+```
+### we can do some test if db is reachable 
+docker exec -it wp-wordpress-1 bash
+```
+
+```
+### within shell do 
+apt update 
+apt-get install -y telnet
+## this should work 
+telnet database 3306
+```
+
+```
+## raus aus telnet  
+STRG + C
+## raus aus dem container  
+exit
+```
+
+```
+## and we even have logs
+docker compose logs 
+```
+### Schritt 3: Webseite aufrufen 
+
+```
+## Zeigt die IP unter inet an. 
+ip a show eth0
+```
+
+```
+## im browser / ip aus letztem Schritt
+http://<ip>:8080
+```
+
+### Example with Ubuntu and Dockerfile
+
+
+### Schritt 1: Erstellen 
+
+```
+cd
+mkdir composetest
+cd composetest
+nano docker-compose.yml
+```
+
+```
+services:
+  myubuntu:
+    build: ./myubuntu
+## Keep container alive (although using bash)
+    command: sleep infinity
+    restart: always
+```
+
+```
+mkdir myubuntu 
+cd myubuntu
+nano Dockerfile
+```
+
+```
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y inetutils-ping
+CMD ["/bin/bash"]
+```
+
+```
+cd ../
+## wichtig, im mit der docker-compose.yml - seiend 
+##pwd 
+##~/bautest
+docker compose up -d 
+## wird image gebaut und container gestartet 
+```
+
+### Schritt 2 - Testen 
+
+```
+docker compose exec -it myubuntu bash
+```
+
+```
+## in der bash 
+ping -c4 www.google.de
+exit
+```
+
+### Hinweis:
+
+```
+Bei Veränderung vom Dockerfile, muss man den Parameter --build mitangeben 
+docker compose up -d --build 
+```
+
+### Logs in docker - compose
+
+
+```
+##Im Ordner des Projektes
+##z.B wordpress-mysql-compose-project 
+cd ~/wordpress-mysql-compose-project 
+docker-compose logs
+## jetzt werden alle logs aller services angezeigt 
+```
+
+### docker-compose und replicas
+
+
+### Beispiel 
+
+```
+version: "3.9"
+services:
+  redis:
+    image: redis:latest
+    deploy:
+      replicas: 1
+    configs:
+      - my_config
+      - my_other_config
+configs:
+  my_config:
+    file: ./my_config.txt
+  my_other_config:
+    external: true
+```
+### Ref:
+
+  * https://docs.docker.com/compose/compose-file/compose-file-v3/
+
+### docker compose Reference
+
+  * https://docs.docker.com/compose/compose-file/compose-file-v3/
 
 ## Kubernetes - Überblick
 
@@ -944,7 +1932,7 @@ it is not suitable for production.
 #### Schritt 2: Kubernetes ausrollen 
 
     * Ansible (leichter bestimmte zu Konfigurieren) 
-    * kubeadmin 
+    * Ansible mit kubeadm 
 
 ### Proxmox 
 
@@ -953,7 +1941,7 @@ it is not suitable for production.
 
 #### Schritt 2: Kubernetes ausrollen 
 
-    * Kubespray (verwendet auch ansible aber direkt auf ansible abgestimmt)
+    * Kubespray (verwendet auch ansible aber direkt auf kubernetes abgestimmt, verwendet unter der Haube kubeadm)
     * Ansible (leichter bestimmte zu Konfigurieren) 
     * kubeadm
 
@@ -1183,6 +2171,53 @@ runcmd:
 ### Liste wichtiger/sinnvoller Client-Tools
 
   * https://github.com/jmetzger/training-kubernetes-einfuehrung/blob/main/tools/liste-client-tools.md
+
+## Kubernetes Installation
+
+### Kubernetes Cluster mit opentofu und bashscripten ausrollen (training-stack)
+
+
+  * ausgerollt mit opentofu (binary ist installiert)
+  * beinhaltet
+      1. 1 controlplane
+      1. 3 worker nodes
+      1. metallb mit ips der Nodes (hacky but works)
+      1. ingress mit wildcard-domain:  *.tlnx.do.t3isp.de
+      1. cert-manager mit helmfile sync 
+
+### Prerequisites 
+
+```
+### Nothing 
+## in /tmp/.env ist die Umgebungsvariable wie folgt gesetzt
+export TF_VAR_do_token=HIER_MUSS_WAS_DRIN_STEHEN
+```
+   
+### Walktrough 
+
+```
+cd
+git clone https://github.com/jmetzger/training-istio-kubernetes-stack-do-terraform.git install
+cd install
+cat /tmp/.env
+source /tmp/.env
+tofu init
+tofu apply -auto-approve
+##
+helmfile sync 
+```
+
+### Hinweis
+
+```
+## Sollte es nicht sauber durchlaufen
+## einfach nochmal
+tofu apply -auto-approve
+
+## Wenn das nicht geht, einfach nochmal neu
+tofu destroy -auto-approve
+tofu apply -auto-approve
+```
 
 ## Kubernetes - Hochverfügbarkeit
 
@@ -2737,6 +3772,7 @@ kubectl create ns <euername>
 kubectl get ns
 kubectl config set-context --current --namespace <euername>
 kubectl get pods
+kubectl config view 
 ```
 
 
@@ -2815,7 +3851,10 @@ kubectl cluster-info
 
 ## Welche Ressourcen / Objekte gibt es, z.B. Pod 
 kubectl api-resources 
-kubectl api-resources | grep namespaces 
+kubectl api-resources | grep namespaces
+
+## Zeigt alle api-Gruppen (Landkarten)
+kubectl api-versions
 
 ## Hilfe zu object und eigenschaften bekommen
 kubectl explain pod 
@@ -5310,7 +6349,11 @@ controller:
 
 ```
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
-helm upgrade -n ingress-haproxy --install ingress-haproxy haproxytech/kubernetes-ingress --version 1.47.4 --reset-values -f values.yaml  
+helm upgrade -n ingress-haproxy --install ingress-haproxy haproxytech/kubernetes-ingress --version 1.47.4  --create-namespace --reset-values -f values.yaml  
+```
+
+```
+kubectl -n ingress-haproxy get pods 
 ```
 
 
@@ -5461,7 +6504,7 @@ metadata:
 spec:
   ingressClassName: haproxy
   rules:
-  - host: "<euername>.app.do.t3isp.de"
+  - host: "<euername>.appv1.do.t3isp.de"
     http:
       paths:
         - path: /apple
@@ -5598,19 +6641,20 @@ kubectl get ingress example-ingress
 ### Step 5: Testing 
 
 ```
-## mit describe herausfinden, ob er die services gefundet 
+## mit describe herausfinden, ob er die services gefundet
+kubectl get ingress example-ingress
 kubectl describe ingress example-ingress
 ```
 
 ```
 ## Im Browser auf:
 ## hier euer Name 
-http://jochen.app.do.t3isp.de/apple
-http://jochen.app.do.t3isp.de/apple/
-http://jochen.app.do.t3isp.de/apple/foo 
-http://jochen.app.do.t3isp.de/banana
+http://jochen.appv1.do.t3isp.de/apple
+http://jochen.appv1.do.t3isp.de/apple/
+http://jochen.appv1.do.t3isp.de/apple/foo 
+http://jochen.appv1.do.t3isp.de/banana
 ## geht nicht 
-http://jochen.app.do.t3isp.de/banana/nix
+http://jochen.appv1.do.t3isp.de/banana/nix
 ```
 
 ## Kubernetes Praxis (Stateful Sets)
@@ -5870,7 +6914,7 @@ helm upgrade --install sealed-secrets --namespace kube-system bitnami-labs/seale
 
 ```
 cd
-cd manifests/secrettest
+cd manifests/cftest 
 ```
 
 ```
@@ -5908,6 +6952,7 @@ kubectl apply -f .
 
 ## Kurz danach erstellt der Controller aus dem sealed secret das secret 
 kubectl get secret
+kubectl get secret mariadb-secret -o yaml 
 
 kubectl get sealedsecrets 
 kubectl get secret mariadb-secret -o yaml
@@ -5923,6 +6968,12 @@ kubectl get sealedsecrets
 ### registry mit secret auth
 
   * https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+
+## Alternativen zu bitnami - sealedsecrets
+
+### Openbao - Fork von Hashicorp Vault
+
+  * https://openbao.org/
 
 ## Kubernetes API-Objekte (Teil 2)
 
@@ -6089,6 +7140,285 @@ kubectl apply -f .
 kubectl get pods
 ```
 
+## ResourceQuota / LimitRange
+
+### ResourceQuota - Ressourcen pro Namespace begrenzen
+
+
+### Hintergrund: Arten von ResourceQuotas
+
+| Kategorie | Beispiele |
+|-----------|-----------|
+| **Compute** | `requests.cpu`, `requests.memory`, `limits.cpu`, `limits.memory` |
+| **Object Count** | `pods`, `services`, `configmaps`, `secrets`, `persistentvolumeclaims` |
+| **Storage** | `requests.storage`, `<storageclass>.storageclass.storage.k8s.io/requests.storage` |
+
+**Wichtig:** Wenn eine ResourceQuota fuer CPU/Memory existiert, MUESSEN alle Pods diese Werte angeben!
+
+### Schritt 1: Namespace erstellen
+
+```
+## Ersetze <dein-name> mit deinem Namen (z.B. hans, petra, etc.)
+kubectl create namespace resource-<dein-name>
+```
+
+### Schritt 2: ResourceQuota anlegen
+
+```
+cd
+mkdir -p manifests
+cd manifests
+mkdir 20-resourcequota
+cd 20-resourcequota
+```
+
+```
+nano 01-resourcequota.yml
+``` 
+
+```
+## vi 01-resourcequota.yml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: my-quota
+spec:
+  hard:
+    requests.cpu: "500m"
+    requests.memory: "256Mi"
+    limits.cpu: "1"
+    limits.memory: "512Mi"
+    pods: "3"
+    services: "2"
+    configmaps: "3"
+```
+
+```
+kubectl apply -f . -n resource-<dein-name>
+```
+
+### Schritt 3: Quota pruefen
+
+```
+kubectl describe resourcequota my-quota -n resource-<dein-name>
+```
+
+Ausgabe zeigt Used vs Hard:
+```
+Resource         Used  Hard
+--------         ----  ----
+configmaps       1     3
+limits.cpu       0     1
+limits.memory    0     512Mi
+pods             0     3
+...
+```
+
+### Schritt 4: Pod mit Ressourcen erstellen
+
+```
+nano 02-pod1.yml
+```
+
+```
+## vi 02-pod1.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+```
+
+```
+kubectl apply -f . -n resource-<dein-name>
+```
+
+### Schritt 5: Quota-Verbrauch pruefen
+
+```
+kubectl describe resourcequota my-quota -n resource-<dein-name>
+```
+
+Jetzt sollte Used aktualisiert sein (z.B. pods: 1, requests.cpu: 100m, etc.)
+
+### Schritt 6: Test - Zu viele Pods
+
+Erstelle pod2 und pod3 mit gleichem Format (anderer name: pod2, pod3):
+
+```
+nano 03-pod2.yml
+```
+
+```
+## vi 03-pod2.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+```
+
+```
+nano 04-pod3.yml
+```
+
+```
+## vi 04-pod3.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod3
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+```
+
+```
+kubectl apply -f . -n resource-<dein-name>
+```
+
+  * Versuche nun einen 4. Pod:
+
+```
+nano 05-pod4.yml
+```
+
+```
+## vi 05-pod4.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod4
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+```
+
+```
+kubectl apply -f . -n resource-<dein-name>
+```
+
+**Erwarteter Fehler:**
+```
+Error from server (Forbidden): pods "pod4" is forbidden: exceeded quota: my-quota, requested: pods=1, used: pods=3, limited: pods=3
+```
+
+### Schritt 7: Test - Zu viel Memory
+
+Loesche zuerst die Pods:
+
+```
+kubectl delete pod pod1 pod2 pod3 -n resource-<dein-name>
+```
+
+ * Versuche einen Pod mit zu viel Memory:
+
+```
+nano 06-pod-big.yml
+```
+
+```
+## vi 06-pod-big.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-big
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "500Mi"
+      limits:
+        cpu: "200m"
+        memory: "600Mi"
+```
+
+```
+kubectl apply -f 06-pod-big.yml -n resource-<dein-name>
+```
+
+**Erwarteter Fehler:**
+```
+Error from server (Forbidden): exceeded quota: my-quota, requested: requests.memory=500Mi, limited: requests.memory=256Mi
+```
+
+### Schritt 8: Test - Pod ohne Resources
+
+```
+## vi 07-pod-no-resources.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-no-resources
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+```
+
+```
+kubectl apply -f 07-pod-no-resources.yml -n resource-<dein-name>
+```
+
+**Erwarteter Fehler:**
+```
+Error from server (Forbidden): must specify limits.cpu, limits.memory, requests.cpu, requests.memory
+```
+
+### Aufraeumen
+
+```
+kubectl delete namespace resource-<dein-name>
+```
+
+### Zusammenfassung
+
+| Szenario | Ergebnis |
+|----------|----------|
+| Pod mit korrekten Resources | Akzeptiert |
+| 4. Pod (Limit: 3) | Abgelehnt |
+| Memory > Quota | Abgelehnt |
+| Pod ohne Resources | Abgelehnt |
+
 ## Helm (Kubernetes Paketmanager)
 
 ### Helm - Was kann Helm
@@ -6136,14 +7466,11 @@ Wenn wir ein Chart installieren, wird eine Release erstellen
 ## Beispiel ubuntu 
 ## snap install --classic helm
 
-## Cluster auf das ich zugreifen kann und im client -> helm und kubectl 
-## Voraussetzung auf dem Client-Rechner (helm ist nichts als anderes als ein Client-Programm) 
-Ein lauffähiges kubectl auf dem lokalen System (welches sich mit dem Cluster verbinden.
--> saubere -> .kube/config 
+## Cluster auf das ich zugreifen kann und im client -> helm (und eine entsprechende .kube/config) 
+## (helm ist nichts als anderes als ein Client-Programm)  
 
 ## Test
 kubectl cluster-info 
-
 ```
 
 
@@ -6154,17 +7481,9 @@ kubectl cluster-info
 Ein Paket für alle Komponenten
 Einfaches Installieren, Updaten und deinstallieren
 Konfigurations-Values-Files übergeben zum Konfigurieren
-Feststehende Struktur 
+Feststehende Struktur
+Konkrete Versionen des Charts
 ```
-
-### Was kann helm ?
-
-
-- **Installieren** und **Deinstallieren** von Anwendungen in Kubernetes (`helm install / helm uninstall`)
-- **Upgraden** von bestehenden Installationen (`helm upgrade`)
-- **Rollbacks** durchführen, falls etwas schiefläuft (`helm rollback`)
-- **Anpassen** von Anwendungen durch Konfigurationswerte (`values.yaml`)
-- **Veröffentlichen** eigener Charts (z. B. in einem Helm-Repository)
 
 ### Helm Example
 
@@ -6348,6 +7667,7 @@ helm upgrade --install my-mariadb oci://registry-1.docker.io/cloudpirates/mariad
 
 ```
 ## Geht das denn auch ?
+helm status my-mariadb
 kubectl get pods
 ```
 
@@ -6362,7 +7682,7 @@ helm list -A
 helm history my-mariadb 
 ```
 
-### Schritt 3: Umschauen get 
+### Schritt 3: Umschauen mit "helm get" 
 
 ```
 ## Wo speichert er Information, die er später mit helm get abruft
@@ -6405,7 +7725,7 @@ helm show values oci://registry-1.docker.io/cloudpirates/mariadb | less
 cd 
 mkdir -p mariadb-values 
 cd mariadb-values
-mkdir prod
+mkdir -p prod
 cd prod
 ```
 
@@ -6484,6 +7804,17 @@ helm get values my-mariadb
 ## Beispiel: 
 helm get values  my-mariadb --revision 1
 ```
+```
+## Advanced 
+helm history my-mariadb 
+helm get values  my-mariadb --revision 1 > v1.yaml
+helm get values  my-mariadb --revision 2 > v2.yaml
+diff v1.yaml v2.yaml 
+```
+
+
+
+
 
 #### Uninstall 
 
@@ -6945,6 +8276,490 @@ helm template bitnami/nginx
 ```  
 
 
+### Nur fertiges manifest ausgeben ohne Installation
+
+### Chart trocken testen gegen api-server ohne Installation --dry-run
+
+## Helm Internals
+
+### Helm template - Rendering Prozess
+
+### helm vs. kubectl vs. oc
+
+## Helm - best practices
+
+### Wann quotes in yaml und in resources  (Kubernetes/OCP)
+
+### Gute Struktur für Values und Charts
+
+### Best Practices for Chart Templating
+
+  * https://helm.sh/docs/chart_best_practices/
+
+## Helm - Advanced
+
+### Helm Dependencies Exercise
+
+
+### Prepare: Create folder structure 
+
+```
+cd 
+mkdir -p my-charts 
+helm create app
+cd app
+```
+
+### Exercise 1: Create chart with Dependency 
+
+```
+nano Chart.yaml 
+```
+
+```
+## Add dependencies 
+dependencies:
+  - name: redis
+    version: "0.9.x"
+    repository: "oci://registry-1.docker.io/cloudpirates"
+```
+
+```
+## Das 1. Mal - dann wird Chart.lock angelegt 
+helm dependency update
+ls -la Chart.lock
+ls -la charts/
+```
+
+```
+rm -fR charts
+helm dependency build
+```
+
+```
+helm dependency --help 
+### what is the difference 
+```
+
+```
+helm template .
+```
+
+### Exercise 2: Create chart with condition 
+
+#### Schritt 1 
+
+```
+nano Chart.yaml
+```
+
+```
+## change dependency block
+## adding condition 
+dependencies:
+  - name: redis
+    version: "0.9.x"
+    repository: "oci://registry-1.docker.io/cloudpirates"
+    condition: redis.enabled
+```
+
+```
+nano values.yaml
+```
+
+```
+## unten anfügen 
+redis:
+  enabled: false
+```
+
+```
+helm template .
+## oder wenn die release app in namespace installiert wurde 
+helm -n app-<euer-name> template app . 
+```
+
+#### Schritt 2
+
+```
+## values-file anlegen
+cd
+mkdir -p helm-values
+cd helm-values
+mkdir app
+cd app
+```
+
+```
+nano values.yaml
+```
+
+```
+redis:
+  enabled: true
+```
+
+```
+cd
+cd my-charts
+helm template app -f ../helm-values/app/values.yaml
+helm template app -f ../helm-values/app/values.yaml | grep kind -A 2
+```
+
+#### Schritt 3: Installation update 
+
+```
+helm -n app-<euer-name> upgrade --reset-values --install app app -f ../helm-values/app/values.yaml
+```
+
+```
+helm -n app-<euer-name> status app
+```
+
+## Helm - Good structure, using umbrella chart 
+
+### Exercise helm umbrella chart
+
+## Helm Grundlagen
+
+### TopLevel Objekte
+
+
+### .Chart 
+
+ * Zieht alle Infomationen aus der Chart.yaml
+ * Alle Eigenschaften fangen mit einem grossen Buchstaben, statt klein wie im Chart, z.B. .Chart.Name
+
+### .Values 
+
+ * Ansprechen der Values bzw. Default Values
+
+### .Release 
+
+ * Ansprechen aller Eigenschaften aus der Release z.B. .Release.Name 
+
+## Helm Charts entwickeln
+
+### eigenes helm chart erstellen (Gruppe)
+
+
+### Chart erstellen 
+
+```
+cd 
+mkdir my-charts
+cd my-charts
+```
+
+```
+helm create my-app
+``` 
+
+### Aufbau des Charts erkunden 
+
+
+
+### helm template (Das Chart nur rendern) 
+
+```
+helm template my-app
+```
+
+
+### Install helm - chart 
+
+```
+## Variante 1:
+helm -n my-app-<namenskuerzel> install meine-app my-app --create-namespace 
+```
+
+```
+## Variante 2:
+cd my-app
+helm -n my-app-<namenskuerzel> install meine-app . --create-namespace
+```
+
+```
+kubectl -n my-app-<namenskuerzel> get all
+kubectl -n my-app-<namenskuerzel> get pods
+helm -n my-app-jochen status meine-app
+
+```
+
+### Wie starte ich am besten ganz einfach - Übung
+
+
+  * Really simple version to start 
+
+### Step 1: Create sample chart 
+
+```
+cd
+mkdir -p my-charts
+cd my-charts
+helm create app 
+cd app
+```
+
+### Step 2: Cleanup 
+
+```
+cd templates
+rm -fR tests
+rm -fR *.yaml
+echo "meine app ist ausgerollt" > NOTES.txt
+cd ..
+rm values.yaml
+## leere datei wird erzeugt 
+touch values.yaml 
+```
+
+### Step 3: Create Deployment manifest 
+
+```
+nano templates/deployment.yaml
+```
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 8 # tells deployment to run 8 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginxinc/nginx-unprivileged:1.22
+        ports:
+        - containerPort: 8080
+```        
+
+### Step 4: Testen des Charts 
+
+```
+helm template .
+helm lint .
+## Akzeptiert der API das so, wie ich es ihm schicke 
+helm -n app-<namenskuerzel> install app . --dry-run  
+helm -n app-<namenskuerzel> upgrade --install app . --create-namespace
+kubectl -n app-<namenskuerzel> get all
+helm -n app-<namenskuerzel> list
+helm -n app-<namenskuerzel> status app 
+```
+
+
+
+## Spezial: Umgang mit Einrückungen
+
+### Whitespaces meistern mit "-"
+
+
+### Grundlagen 
+
+  * In Helm (bzw. in Go-Templates) hast du verschiedene Möglichkeiten, den Umgang mit Whitespace (z. B. Leerzeichen, Zeilenumbrüche) zu steuern:
+
+- `{{ ... }}`:  
+  Standardvariante. Lässt den Whitespace außerhalb der geschweiften Klammern unverändert.
+
+- `{{- ... }}`:  
+  Entfernt den Whitespace links (vor) dem Ausdruch, aber AUCH Zeilenumbrüche   
+
+- `{{ ... -}}`:  
+  Entfernt den Whitespace rechts (nach) dem Ausdruck, aber AUCH Zeilenumbrüche 
+
+- `{{- ... -}}`:  
+  Entfernt Whitespace sowohl links als auch rechts des Ausdrucks, aber AUCH Zeilenumbrüche 
+
+
+### Exercise Whitespaces
+
+
+### Explanation 
+
+  * {{- -> trim on left side / INCLUDING new lines 
+  * -}} -> trim on right side / ALSO: new lines 
+  * trim tabs, whitespaces a.s.o. (see ref)
+
+### Walkthrough 
+
+```
+cd
+mkdir -p helm-exercises
+cd helm-exercises
+```
+
+```
+## When ever we encounter error while parsing yaml, we can use comment !!!
+helm create testenv
+cd testenv/templates
+rm -fR *.yaml
+rm -fR tests
+```
+
+```
+nano test.yaml
+```
+
+```
+## "{{23 -}} < {{- 45}}"
+```
+
+```
+helm template .. 
+helm template --debug ..
+```
+
+```
+## now with new lines
+nano test2.yaml
+```
+
+```
+## {{23 -}}
+newline here
+```
+
+```
+helm template ..
+helm template --debug ..
+```
+
+
+### Reference:
+
+  * https://pkg.go.dev/text/template#hdr-Text_and_spaces
+
+## Type - Conversions
+
+### Exercise toYaml
+
+### Exercise toYaml - with app deployoment resources
+
+## Flow Control
+
+### if
+
+### if - render only on condition (HPA)
+
+### with
+
+### range
+
+
+### Preparation
+
+```
+cd
+mkdir -p helm-exercises
+cd helm-exercises 
+helm create range
+cd range/templates
+rm -f NOTES.txt
+rm -f *.yaml
+rm -fR tests 
+cd ..
+rm -f values.yaml
+```
+
+### Step 1: Values.yaml 
+
+```
+nano values.yaml
+```
+
+```
+favorite:
+  drink: coffee
+  food: pizza
+pizzaToppings:
+  - mushrooms
+  - cheese
+  - peppers
+  - onions
+```
+
+### Step 2 (Version 1):
+
+```
+cd templates
+nano cm.yaml
+```
+
+```
+## nano cm.yaml 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "Hello World"
+  {{- with .Values.favorite }}
+  drink: {{ .drink | default "tea" | quote }}
+  food: {{ .food | upper | quote }}
+  {{- end }}
+  toppings: |-
+    {{- range .Values.pizzaToppings }}
+    - {{ . | title | quote }}
+    {{- end }}    
+```
+
+```
+helm template ..
+```
+
+### Step 3 (Version 2 - works as well) 
+
+  * Accessing the parent scope
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "Hello World"
+  {{- with .Values.favorite }}
+  drink: {{ .drink | default "tea" | quote }}
+  food: {{ .food | upper | quote }}
+  toppings: |-
+    {{- range $.Values.pizzaToppings }}
+    - {{ . | title | quote }}
+    {{- end }}    
+  {{- end }}
+```
+
+## Named Templates
+
+## Helm - Fehlerhandling 
+
+### Fehlerbehandlung mit require - url muss gesetzt werden
+
+## Helm mit gitlab ci/cd
+
+### Helm mit gitlab ci/cd ausrollen
+
+## Metrics - Server
+
+### Metrics - Server mit helm installieren und verwenden
+
+## helm - Dokumentation
+
+### Helm Documentation
+
+  * https://helm.sh/docs/
+
+### Built in TopLevel - Objects like .Release
+
+  * https://helm.sh/docs/chart_template_guide/builtin_objects/
+
 ## Helm Charts erstellen und analysieren
 
 ### Eigenes Helm-Chart erstellen
@@ -6962,6 +8777,17 @@ cd my-charts
 helm create my-app
 ``` 
 
+### Aufbau des Charts erkunden 
+
+
+
+### helm template (Das Chart nur rendern) 
+
+```
+helm template my-app
+```
+
+
 ### Install helm - chart 
 
 ```
@@ -6972,12 +8798,14 @@ helm -n my-app-<namenskuerzel> install meine-app my-app --create-namespace
 ```
 ## Variante 2:
 cd my-app
-helm -n my-app-<namenskuerzel> install meine-app . --create-namespace 
+helm -n my-app-<namenskuerzel> install meine-app . --create-namespace
 ```
 
 ```
 kubectl -n my-app-<namenskuerzel> get all
-kubectl -n my-app-<namenskuerzel> get pods 
+kubectl -n my-app-<namenskuerzel> get pods
+helm -n my-app-jochen status meine-app
+
 ```
 
 ### Chart zur Analyse runterladen und entpacken
@@ -7075,6 +8903,941 @@ id
 ## Deshalb funktioniert ein Öffnen des Ports 80 beim Starten nicht
 ``` 
 
+
+## GitOps mit Flux
+
+### Flux Ueberblick - Controller, CRDs und Ablauf
+
+
+> Ziel dieses Dokuments: Verständlich erklären, **wie Flux arbeitet**, **welche Controller es gibt**, **welche CRDs zu Flux gehören**, **wofür sie sinnvoll sind** und **welche Aufgaben die Controller haben**.
+
+---
+
+### 1) Grundprinzip: GitOps + Reconciliation
+
+Flux arbeitet „pull-based“:
+
+1. **Quelle beobachten** (Git/OCI/Helm-Repo/S3-Bucket)
+2. **Artefakt bauen** (z. B. tar.gz mit Repo-Snapshot oder Helm-Chart-Artifact)
+3. **Zielzustand ableiten** (Kustomize oder Helm)
+4. **Ist-Zustand im Cluster angleichen** (apply/upgrade)
+5. **Wiederholen** (in Intervallen oder bei Triggern), inkl. Status/Events
+
+Wichtig: Flux „macht nichts einmalig“, sondern **reconciled** immer wieder, bis Ist = Soll.
+
+---
+
+### 2) Die Flux-Controller (Komponenten) und ihre Aufgaben
+
+Flux besteht aus mehreren Controllern (Deployments), die jeweils **bestimmte CRDs** beobachten und „reconciled“ ausführen:
+
+#### 2.1 source-controller (Quellen + Artefakte)
+**Aufgabe**
+- Holt Inhalte aus **Git**, **OCI**, **HelmRepositories** oder **Buckets**
+- Erzeugt **versionierte Artefakte** (z. B. tar.gz) und stellt sie für andere Controller bereit
+- Verifiziert optional Signaturen/Checksums (je nach Setup)
+
+**Typische Outputs**
+- „Artifact“: Ein referenzierbares Paket (URL + Digest + Revision)
+
+**CRDs**
+- `GitRepository` – Git Repo als Source (Branch/Tag/Commit, Auth, Interval)
+- `OCIRepository` – OCI-Artifact als Source (z. B. “oci://…”)
+- `HelmRepository` – Helm Chart Repo Index als Source
+- `Bucket` – S3/GCS/etc. Bucket als Source
+- `HelmChart` – (meist automatisch) „Chart-Build“ aus HelmRepository + Chart + Version/Constraints
+- `HelmPullRequest` – (optional/selten) für PR-basiertes Chart Pulling (nicht in jedem Setup genutzt)
+
+**Wofür sinnvoll?**
+- Trennung „**beschaffen**“ (Source) von „**anwenden**“ (Helm/Kustomize)
+- Einheitlicher Artefakt-Mechanismus für alle nachfolgenden Controller
+
+---
+
+#### 2.2 helm-controller (Helm Releases)
+**Aufgabe**
+- Installiert/Upgraded/Uninstallt Helm Releases anhand von `HelmRelease`
+- Nutzt als Input Helm-Chart-Artefakte (aus source-controller: `HelmChart`/Artifacts)
+- Verarbeitet Values (inline, ConfigMap/Secret refs, etc.)
+- Wartet optional auf Readiness, führt Rollbacks durch (je nach Policy)
+
+**CRDs**
+- `HelmRelease` – beschreibt Release (Chart-Quelle, Version, Values, Drift/Upgrade Strategy)
+
+**Wofür sinnvoll?**
+- „Helm as reconciliation“: Release ist deklarativ, Upgrades reproduzierbar, Status nachvollziehbar
+
+---
+
+#### 2.3 kustomize-controller (YAML / Kustomize)
+**Aufgabe**
+- Rendert und applied Kubernetes Ressourcen aus einem Source-Artefakt
+- Unterstützt Kustomize (overlays, patches, images, etc.)
+- Kann (optional) Helm-Rendering über Kustomize nutzen, ist aber typischerweise „YAML/Kustomize-first“
+
+**CRDs**
+- `Kustomization` – beschreibt Pfad im Artifact, Prune, Health Checks, DependsOn, Interval etc.
+
+**Wofür sinnvoll?**
+- Deklaratives Ausrollen von „plain YAML“ oder Kustomize-Overlays
+- Gute Orchestrierung über `dependsOn`, Health Checks und `prune`
+
+---
+
+#### 2.4 notification-controller (Events/Alerts/Inbound Webhooks)
+**Aufgabe**
+- Sendet Benachrichtigungen über Zustandsänderungen/Events (z. B. Slack/Webhook/Teams)
+- Kann Webhooks empfangen (z. B. GitHub/GitLab/Harbor) und dadurch „reconcile now“ auslösen
+
+**CRDs**
+- `Provider` – Zielsystem (Slack/Webhook/etc.) + Credentials
+- `Alert` – Regeln: Welche Events von welchen Objekten (z. B. HelmRelease, Kustomization) wohin
+- `Receiver` – Inbound Webhook Endpoint (z. B. GitHub) + Token/Secret
+
+**Wofür sinnvoll?**
+- Feedback-Kanal: „Was passiert gerade im Cluster?“
+- Schnellere Reconciliation durch Webhook statt Polling (optional)
+
+---
+
+#### 2.5 image-reflector-controller (Image Tags/Registry beobachten)
+**Aufgabe**
+- Scannt Container Registries und speichert Metadaten (Tags, Digests)
+- Liefert Grundlage für „Image Update Automation“
+
+**CRDs**
+- `ImageRepository` – Welche Registry/Repo scannen? Auth? Interval?
+- `ImagePolicy` – Welche Tags/Digests sind „gewünscht“ (semver, regex, latest digest, …)
+- `ImageScanResult` – (intern/implizit) Status-Daten, je nach Version/Setup
+
+**Wofür sinnvoll?**
+- Automatisches „finden“ neuer Images (z. B. neuestes semver)
+
+---
+
+#### 2.6 image-automation-controller (Git Updates/Commits)
+**Aufgabe**
+- Schreibt Updates (z. B. neue Image Tags) in ein Git Repo zurück (Commit/Push)
+- Dadurch triggert Flux anschließend selbst wieder „normalen“ GitOps-Flow
+
+**CRDs**
+- `ImageUpdateAutomation` – welches Repo/Branch, Commit Message, Update-Strategie (YAML Setter, kustomize images, …)
+
+**Wofür sinnvoll?**
+- Git bleibt „source of truth“, aber Image Updates passieren automatisiert
+
+---
+
+### 3) Welche CRDs gibt es in Flux v2.7 (kompakt)
+
+> Hinweis: Die CRDs sind in APIs gruppiert (z. B. `source.toolkit.fluxcd.io`, `helm.toolkit.fluxcd.io`, …).
+> Die wichtigsten „Alltags-CRDs“ sind:
+
+#### source.toolkit.fluxcd.io
+- `GitRepository`
+- `OCIRepository`
+- `HelmRepository`
+- `Bucket`
+- `HelmChart` (Chart artifact builder)
+
+#### helm.toolkit.fluxcd.io
+- `HelmRelease`
+
+#### kustomize.toolkit.fluxcd.io
+- `Kustomization`
+
+#### notification.toolkit.fluxcd.io
+- `Provider`
+- `Alert`
+- `Receiver`
+
+#### image.toolkit.fluxcd.io
+- `ImageRepository`
+- `ImagePolicy`
+- `ImageUpdateAutomation`
+
+---
+
+### 4) Ablauf erklärt: Helm Charts Deployment mit Flux (Schritt-für-Schritt)
+
+#### Beispielziel
+Wir wollen ein Helm Chart (z. B. `ingress-nginx`) deklarativ ausrollen.
+
+#### Die beteiligten Objekte (minimal)
+1. `HelmRepository` (Quelle: Chart Repo)
+2. `HelmRelease` (Release Definition)
+
+Optional/implizit:
+- `HelmChart` wird häufig **automatisch** vom source-controller erzeugt (Artifact-Build)
+- Notification- und Image-Komponenten sind optional
+
+---
+
+#### 4.1 Ablauf (in Worten)
+
+**A) source-controller: Chart-Quelle bereitstellen**
+1. `HelmRepository` wird reconciled:
+   - source-controller lädt `index.yaml` des Chart Repos
+   - speichert Status/Revision (z. B. index digest)
+2. Für einen `HelmRelease` wird (oft) ein `HelmChart` Artifact erzeugt:
+   - source-controller lädt die Chart `.tgz` Datei (oder OCI chart)
+   - baut Artifact, versieht es mit Digest, stellt es bereit
+
+**B) helm-controller: Release ausrollen**
+3. helm-controller reconciled `HelmRelease`:
+   - holt Chart-Artifact Referenz (vom source-controller)
+   - rendert Templates mit `values`
+   - führt `helm upgrade --install`-Äquivalent aus (intern, ohne dass ihr Helm CLI nutzt)
+   - optional: `wait`, `timeout`, `rollback`, `drift detection` je nach Spec
+4. Status wird im `HelmRelease` aktualisiert:
+   - letzte erfolgreiche Revision, ObservedGeneration, Conditions (Ready/NotReady)
+
+**C) Wiederholung & Änderungen**
+5. Neue Chart-Version im Repo oder Werte-Änderungen → nächster Reconcile
+6. Flux sorgt dafür, dass der Cluster-Zustand wieder dem gewünschten Zustand entspricht
+
+---
+
+### Flux Installation mit flux-cli
+
+
+  * Das Kommandozeilen-Tool ist neben dem Operator der empfohlene Weg
+
+### TRAINER: Schritt 1: Binary ausrollen (Hat Trainer bereits gemacht) 
+
+```
+sudo su -
+```
+
+```
+curl -s https://fluxcd.io/install.sh | sudo bash
+```
+
+```
+## Autocompletion aktivieren
+flux completion bash > /etc/bash_completion.d/flux 
+```
+
+
+### Schritt 2: flux check --precheck (Voraussetzungen erfüllt ?)  
+
+```
+## Stimmen die Voraussetzungen ?
+flux check --pre
+```
+
+
+### Schritt 3: gitlab - repo einrichten 
+
+```
+1. https://gitlab.com/projects/new#blank_project
+
+```
+
+<img width="1275" height="795" alt="image" src="https://github.com/user-attachments/assets/41e46904-3972-4c77-9be4-0f8960b268f3" />
+
+
+```
+## Klicken auf "Create Project"
+```
+
+> [!IMPORTANT] 
+> Token am Ende rauskopieren 
+
+
+### Schritt 4: Token für project erstellen 
+
+```
+1. https://gitlab.com/jmetzger/flux-test-jm/-/settings/access_tokens
+```
+
+
+```
+* Api rechte vergeben.
+* Maintainer Rolle wird mindestens benötigt, da flux, deploy keys verwaltet und repository Einstellungen setzen können muss.
+```
+
+<img width="1402" height="732" alt="image" src="https://github.com/user-attachments/assets/339149cc-0d4a-4f45-8f0a-bf26729445fa" />
+
+
+### Schritt 5: Flux in gitlab bootstrappen  
+
+
+```
+## Endpunkt für die Flux - Konfigurationsobjekte einrichten
+export GITLAB_TOKEN=<dein-personal-access-token>
+
+## Bootstrap für Production-Cluster
+flux bootstrap gitlab \
+  --owner=training.tn<Deine-Teilnehmer-Nr> \
+  --repository=<Dein-Repo> \
+  --branch=main \
+  --path=clusters/production \
+  --token-auth
+```
+
+<img width="1290" height="783" alt="image" src="https://github.com/user-attachments/assets/6c1d1118-40c4-488d-9cfb-bd0b58a25e9c" />
+
+
+
+
+### HelmRepository - Helm Chart Repositories verwalten
+
+
+### Hintergrund
+
+`HelmRepository` ist eine Flux Custom Resource Definition (CRD), die ein Helm Chart Repository als Quelle definiert. Der **source-controller** ueberwacht diese Ressource und laedt periodisch den Repository-Index (`index.yaml`).
+
+| Eigenschaft | Beschreibung |
+|-------------|--------------|
+| **API Group** | `source.toolkit.fluxcd.io/v1` |
+| **Controller** | source-controller |
+| **Funktion** | Helm Chart Repository Index bereitstellen |
+| **Update** | Periodisch (interval) oder per Webhook |
+
+### Voraussetzungen
+
+- Flux installiert (siehe [02-installation-helm.md](02-installation-helm.md))
+- `source-controller` laeuft
+
+### Schritt 1: Vorbereitung
+
+```
+cd
+mkdir -p manifests
+cd manifests
+```
+
+```
+git clone https://gitlab.com/jmetzger/<dein-repo-name>.git flux
+cd flux
+```
+
+### Schritt 2: HelmRepository fuer Traefik erstellen
+
+Wir definieren das Traefik Helm Repository als Quelle:
+
+```
+mkdir -p clusters/production/infrastructure/sources
+mkdir -p clusters/production/infrastructure/releases
+mkdir -p clusters/production/apps/sources
+mkdir -p clusters/production/apps/releases 
+
+cd clusters/production/
+nano infrastructure/sources/traefik.yml
+```
+
+```
+## vi infrastructure/sources/traefik.yml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: traefik
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: https://traefik.github.io/charts
+```
+
+```
+git config --global user.email "name@email.com"
+git config --global user.name "Dein Name" 
+git add -A
+git commit -am "Added helmRepository"
+git push -u origin main
+## username: training.tn<deine-nr>
+## passwort: bekanntes Passwort eingeben
+```
+
+### Schritt 3: Aktualisierung dauert ca. 1 Minute 
+
+```
+kubectl get helmrepository -A
+```
+
+
+**Erklaerung:**
+| Feld | Wert | Bedeutung |
+|------|------|-----------|
+| `interval` | `10m` | Alle 10 Minuten Index neu laden |
+| `url` | `https://...` | Helm Chart Repository URL |
+| `namespace` | `flux-system` | Namespace wo Flux installiert ist |
+
+**Erwartete Ausgabe:**
+```
+NAME      URL                                  AGE   READY   STATUS
+traefik   https://traefik.github.io/charts    30s   True    stored artifact for revision 'sha256:...'
+```
+
+**Status-Felder:**
+- `READY: True` - Repository Index erfolgreich geladen
+- `STATUS` - Zeigt Revision (SHA256 des Index)
+
+
+### Schritt 5: Alle HelmRepositories anzeigen
+
+```
+kubectl get helmrepository -n flux-system
+```
+
+**Erwartete Ausgabe:**
+```
+NAME            URL                                                  AGE    READY   STATUS
+traefik         https://traefik.github.io/charts                    5m     True    stored artifact...
+```
+
+### Schritt 6: HelmRepository mit Authentifizierung (optional)
+
+Falls ein Repository Authentifizierung benoetigt:
+
+```
+## vi 03-helmrepo-private.yml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: my-private-repo
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: https://charts.example.com
+  secretRef:
+    name: helm-repo-credentials
+```
+
+**Secret erstellen:**
+```
+kubectl create secret generic helm-repo-credentials \
+  --from-literal=username=myuser \
+  --from-literal=password=mypassword \
+  -n flux-system
+```
+
+### Schritt 7: Manuelles Update triggern (optional)
+
+Flux reconciled automatisch basierend auf `interval`. Manuelles Update:
+
+```
+flux reconcile source helm traefik
+```
+
+**Oder mit kubectl:**
+```
+kubectl annotate helmrepository traefik -n flux-system \
+  reconcile.fluxcd.io/requestedAt="$(date +%s)"
+```
+
+### Was passiert im Hintergrund?
+
+1. **source-controller** laedt `index.yaml` vom Repository
+2. Speichert Artifact intern (mit SHA256 Digest)
+3. Macht Artifact verfuegbar unter `http://source-controller.flux-system.svc.cluster.local./...`
+4. Andere Controller (z.B. helm-controller) koennen darauf zugreifen
+
+### Haeufige Szenarien
+
+| Use Case | interval | Grund |
+|----------|----------|-------|
+| **Public Stable** | `30m` - `1h` | Charts aendern sich selten |
+| **Public Frequent** | `5m` - `10m` | Haeufige Updates (z.B. CI/CD) |
+| **Private/Intern** | `10m` | Balance zwischen Last und Aktualitaet |
+| **Webhook-basiert** | `1h` + Webhook | Nur bei Push aktualisieren |
+
+### Zusammenfassung
+
+| Aktion | Befehl |
+|--------|--------|
+| Status pruefen | `kubectl get helmrepository -n flux-system` |
+| Manuell aktualisieren | `flux reconcile source helm traefik` |
+
+### Naechster Schritt
+
+Im naechsten Schritt ([04-helmrelease.md](04-helmrelease.md)) nutzen wir diese HelmRepositories, um tatsaechlich Helm Charts mit `HelmRelease` auszurollen.
+
+### Aufraeumen
+
+```
+kubectl delete -f .
+```
+
+**Hinweis:** Loescht alle HelmRepository Objekte im aktuellen Verzeichnis.
+
+### HelmRelease - Helm Charts deklarativ ausrollen
+
+
+### Hintergrund
+
+`HelmRelease` ist die zentrale Flux CRD zum Ausrollen von Helm Charts. Der **helm-controller** reconciled diese Ressource und fuehrt `helm upgrade --install` automatisch aus.
+
+| Eigenschaft | Beschreibung |
+|-------------|--------------|
+| **API Group** | `helm.toolkit.fluxcd.io/v2` |
+| **Controller** | helm-controller |
+| **Funktion** | Helm Release deklarativ verwalten |
+| **Reconciliation** | Automatische Upgrades bei Aenderungen |
+
+### Voraussetzungen
+
+- Flux installiert (siehe [02-installation-flux-cli.md](02-installation-flux-cli.md))
+- HelmRepository erstellt (siehe [03-helmrepository.md](03-helmrepository.md))
+
+### Schritt 1: Vorbereitung
+
+  * **Achtung: unser Flux - Replo muss geklont worden sein**
+
+```
+cd
+mkdir -p manifests/flux/clusters/production/infrastructure/releases
+cd manifests/flux/clusters/production/infrastructure/releases 
+```
+
+### Schritt 2: HelmRelease fuer traefik erstellen
+
+Wir rollen traefik aus dem traefik Repository aus:
+
+```
+nano traefik.yml
+```
+
+```
+## vi traefik.yml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: ingress
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      version: 39.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  install:
+    createNamespace: true
+  values:
+    replicas: 2
+```
+
+```
+git add -A
+git commit -am "Added HelmRelease"
+git push
+```
+
+**Erklaerung:**
+| Feld | Wert | Bedeutung |
+|------|------|-----------|
+| `interval` | `5m` | Pruefe alle 5 Minuten auf Drift/Updates |
+| `chart` | `traefik` | Chart Name aus dem Repository |
+| `version` | `1.3.3` | Spezifische Chart Version |
+| `sourceRef` | `cloudpirates` | Referenz auf HelmRepository |
+| `values` | ... | Ueberschreibt Chart Default-Values |
+
+### Schritt 4: Status pruefen
+
+```
+kubectl get helmrelease -A
+## Fehler
+```
+
+<img width="1902" height="112" alt="image" src="https://github.com/user-attachments/assets/569129b6-03c7-474e-ada4-9ff6c91c8d69" />
+
+```
+kubectl -n ingress describe helmrelease traefik 
+## Fehler
+```
+
+```
+ 2026-02-17T17:45:18.943742569Z: preparing upgrade for traefik
+2026-02-17T17:45:19.054850747Z: resetting values to the chart's original version
+  Warning  UpgradeFailed  55s  helm-controller  (combined from similar events): Helm upgrade failed for release ingress/traefik with chart traefik@39.0.1: values don't meet the specifications of the schema(s) in the following chart(s):
+traefik:
+- at '': additional properties 'replicas' not allowed
+```
+
+
+### Schritt 5: Richtige values für deployments recherchieren 
+
+```
+in artifacthub.io
+```
+
+### Schritt 6: values korrigieren 
+
+```
+nano traefik.yml
+```
+
+```
+## vi infrastructure/releases/traefik.yml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: ingress
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      version: 39.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  install:
+    createNamespace: true
+  values:
+    deployment:
+      replicas: 2
+```
+
+```
+git add -A
+git commit -am "adjusted replicas"
+git push
+```
+
+```
+flux get source git
+flux get helmreleases -A
+kubectl -n ingress get helmrelease traefik
+helm -n ingress list 
+helm -n ingress history traefik
+helm -n ingress get values traefik
+```
+
+<img width="357" height="90" alt="image" src="https://github.com/user-attachments/assets/5ca35cde-0395-4e6c-b177-ba25bdc9e9ae" />
+
+
+
+### Schritt 7: Details des HelmRelease anzeigen
+
+```
+kubectl get helmrelease traefik -n ingress -o yaml | grep -A 10 status
+```
+
+**Wichtige Informationen:**
+- `lastAttemptedRevision` - Letzte versuchte Version
+- `conditions` - Status der Reconciliation
+
+
+
+
+### OCI-Helm-Chart verwalten an Beispiel Cloudimages / mariadb
+
+
+### Prerequisites 
+
+  * Repo "flux" (Repo mit Deinem Namen) muss ausgecheckt sein (git clone https://gitlab.com/training.tn<nr>/<dein-repo>.git) als flux
+
+### Schritt 1: OCIRepository einrichten 
+
+```
+cd
+## Falls noch nicht existent, tut aber auch ansonsten nicht weh !
+mkdir -p manifests/flux/clusters/production/apps/sources 
+cd manifests/flux/clusters/production/apps/sources
+nano cloudpirates.yaml 
+``` 
+
+```
+## oci-cloudpirates.yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: cloudpirates-mariadb
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: oci://registry-1.docker.io/cloudpirates/mariadb
+  ref:
+    version: "0.14.1"
+```
+
+```
+## Wieder nach online pushen
+git add -A
+git commit -am "Added OCIRepository cloudpirates-mariadb"
+git push
+```
+
+<img width="1092" height="229" alt="image" src="https://github.com/user-attachments/assets/f83848e1-6b72-4c3b-bf11-6613ef8f914a" />
+
+### Schritt 2: Funktioniert nicht ? Warum ? 
+
+```
+## Ihr müsst einen Moment warten bis die neue "commit-id" zu sehen ist
+## bzw. bis der Fehler kommt (System mach erst ein dry-run und spring noch garnicht auf die neue commit-id
+```
+
+```
+## Er hat das richtige commit gezogen
+flux get sources git
+## aber dieses noch nicht angewendet
+flux get kustomizations
+```
+
+<img width="1898" height="120" alt="image" src="https://github.com/user-attachments/assets/99830fd5-8e49-4e72-b0f1-645fb377480a" />
+
+```
+## das Feld "version" gibt es nicht
+## Welches Feld gibt es denn, unter ref ?
+kubectl explain OCIRepository.spec.ref
+```
+
+### Schritt 3: version ändern in tag:
+
+```
+nano cloudpirates.yaml 
+``` 
+
+```
+## vi cloudpirates.yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: cloudpirates-mariadb
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: oci://registry-1.docker.io/cloudpirates/mariadb
+  ref:
+## ---> hier: von version -> nach -> tag
+    tag: "0.14.1"
+```
+
+```
+## Wieder nach online pushen
+git add -A
+git commit -am "Added OCIRepository cloudpirates-mariadb"
+git push
+```
+
+```
+## Er hat das richtige commit gezogen
+flux get sources git
+## aber dieses noch nicht angewendet
+watch flux get kustomizations
+## << raus kommt ihr wieder mit CTRL+C 
+```
+
+```
+## ist ociregistry da ?
+kubectl -n flux-system get ocirepositories
+```
+
+
+
+### Schritt 4: HelmRelease anlegen 
+
+   * version wird hier nicht verwendet, weil das bereits im OCIRepository ist.
+
+```
+cd
+cd manifests/flux/clusters/production/apps/releases
+nano mariadb.yaml
+```
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mariadb
+  namespace: default
+spec:
+  interval: 10m
+  chartRef:
+    kind: OCIRepository
+    name: cloudpirates-mariadb
+    namespace: flux-system
+```
+
+```
+git add -A
+git commit -am "added helmrelease mariadb"
+git push
+```
+
+
+
+### Schritt 6: War die installation für mariadb - erfolgreich ?
+
+```
+flux get sources git
+flux get kustomizations
+flux get helmreleases -A
+kubectl get pods
+## Was ist das Problem ?
+kubectl describe pods mariadb
+```
+
+### Schritt 7: csi nfs treiber installieren und einrichten
+
+```
+cd
+cd install
+cat helmfile-csi-nfs.yaml
+helmfile -f helmfile-csi-nfs.yaml sync
+```
+
+```
+## Überprüfen
+kubectl -n kubesystem get pods | grep nfs
+```
+
+```
+## Was ist jetzt mit dem mariadb pod
+## Creating .... Ready -> 1/1 dauert immer einen Moment 
+kubectl get pods
+```
+
+### Schritt 8: flux geradeziehen 
+
+  * Wenn es zu lange dauert, könnte es sein, dass flux immer noch einen fehler anzeigt
+
+```
+flux get helmreleases -A
+```
+
+<img width="1900" height="199" alt="image" src="https://github.com/user-attachments/assets/1e18b427-73d1-4b1e-9561-f43fad12460b" />
+
+```
+## falls dieser hängt 
+flux reconcile helmrelease mariadb -n default
+## machen wir das mit --force 
+flux reconcile helmrelease mariadb -n default --force
+helm list -A
+helm -n default status mariadb
+```
+
+
+### Eigenes Chart erstellen und deployen
+
+
+  * helmchart liegt im git
+
+### Schritt 1: Chart erstellen 
+
+```
+cd
+mkdir helm-chart-test/
+cd helm-chart-test
+helm create final-chart
+```
+
+### Schritt 2: Repo einrichten 
+
+  * Achtung: Repo muss leer sein
+```
+URL rauskopieren, z.B. https://gitlab.com/training.tn<nr>/final-chart-<dein-kuerzel>.git
+```
+
+
+### Schritt 3: lokal git initialisieren und pushen
+
+```
+## in git einchecken
+git init
+git remote add origin https://gitlab.com/training-tn<nr>/final-chart-<dein-kuerzel>.git
+git add -A
+git commit -am "Chart hochschicken"
+git push -u origin master
+```
+
+### Schritt 4: In Flux einpflegen (GIT) 
+
+```
+cd
+mkdir -p manifests/flux/clusters/production/apps/sources 
+cd manifests/flux/clusters/production/apps/sources
+```
+
+```
+nano mein-chart.yaml
+```
+
+```
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: mein-helm-chart
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://gitlab.com/training-tn<nr>/final-helm-chart-<nr>.git
+  ref:
+    branch: master
+```
+
+```
+git add -A
+git commit -am "added gitrepository"
+git push
+```
+
+### Schritt 5: Überprüfen ob es geklappt hat 
+
+  * Das kann 1 Minute dauern bis man es sieht
+
+```
+flux get source git 
+```
+
+### Schritt 6: helmRelease einpflegen 
+
+```
+mkdir -p manifests/flux/clusters/production/apps/releases  
+cd manifests/flux/clusters/production/apps/releases
+```
+
+```
+nano final-chart.yaml
+```
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: final-chart
+  namespace: flux-system
+spec:
+  interval: 1m
+  targetNamespace: ns-final-chart
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: final-chart         # Pfad zum Chart im Repo
+      version: "0.1.0"
+      sourceRef:
+        kind: GitRepository
+        name: mein-helm-chart
+        namespace: flux-system
+  values:
+    replicaCount: 2
+    service:
+      type: NodePort
+```
+
+```
+git add -A
+git commit -am "added final-chart"
+git push
+```
+
+### Schritt 7: Überprüfen 
+
+```
+flux get source git
+flux get kustomization -A
+flux get helmrelease -A
+helm list -A
+kubectl -n ns-final-chart get pods
+```
 
 ## Helpful plugins
 
@@ -7237,7 +10000,7 @@ metadata:
   name: nfs-csi
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: 10.135.0.5
+  server: 10.135.0.22
   share: /var/nfs
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
@@ -7324,11 +10087,18 @@ kubectl exec -it nginx-nfs -- bash
 cd /mnt/nfs
 ls -la
 ## outfile
-tail -f /mnt/nfs/outfile
+tail -f outfile
 ```
 
 ```
-CTRL+C
+CTRL + C
+```
+
+```
+head outfile 
+```
+
+```
 exit
 ```
 
@@ -7365,6 +10135,50 @@ exit
 
 ```
 kubectl delete -f .
+```
+
+### Step 9: use deployment 
+
+```
+nano 04-deploy.yml 
+```
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-nginx-nfs
+spec:
+  selector:
+    matchLabels:
+      web: my-nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        web: my-nginx
+    spec:
+      containers:
+      - image: nginx:1.23
+        name: nginx-nfs
+        command:
+          - "/bin/bash"
+          - "-c"
+          - set -euo pipefail; while true; do echo $(date) >> /mnt/nfs/outfile; sleep 1; done
+        volumeMounts:
+          - name: persistent-storage
+            mountPath: "/mnt/nfs"
+            readOnly: false
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: pvc-nfs-dynamic
+```
+
+````
+kubectl apply -f .
 ```
 
 
@@ -8511,6 +11325,105 @@ kubectl get volumeattachment
 
 **Force-Delete** hilft hier nicht beim Volume-Problem, sondern man muss das VolumeAttachment-Objekt oder den Node-Status addressieren.
 
+## Kubernetes Installation
+
+### Kubernetes Installation mit Proxmox und kubespray
+
+
+### Schritt 1: virtuellen Maschine deployen 
+
+  * 4GB (control nodes eher 8GB) - minimaler Arbeitsspeicher
+  * Debian als Betriebssystem
+  * minimale Installation
+  * ssh-server installiert (openssh-server)
+  * sudo benutzer ohne Passwort für privilege Escalation (z.B. admin darf als root arbeiten)
+
+### Info 1.1 Netzwerk 
+
+   * Alle virtuellen Maschinen im gleichen Netzwerk (kein VLAN)
+   * Kubernetes mit eigenem VLAN
+   * Alternativ neuerdings: mit SDN (Performance beobachten !)
+
+### Schritt 2: maschine mit ansible (kubespray) deployen/nutzen 
+
+   * private/public key erstellen und den public auf die maschinen aus Schritt 1 verteilen
+   * ansible und git installieren
+   * kubespray clonen oder docker image verwenden (dann braucht man kein ansible installieren)
+   * apt update -y; apt install docker.io -y
+   * Inventory rauskopieren und anpassen
+
+```
+[all]
+## Master/Control Plane Node
+kube-master ansible_host=192.168.1.10
+## Worker Nodes
+kube-worker1 ansible_host=192.168.1.11
+kube-worker2 ansible_host=192.168.1.12
+
+[kube_control_plane]
+kube-master
+
+[etcd]
+kube-master
+
+[kube_node]
+kube-worker1
+kube-worker2
+```
+
+```
+## evtl config anpassen vornehmen in den group vars
+## z.B. 
+https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
+```
+
+```
+ansible-playbook -i inventory/mycluster/ cluster.yml -b -v \
+  --private-key=~/.ssh/private_key
+```
+
+```
+## zum hostsystem verbinden und die kubeconfig
+## in der Regel
+cd /home/<user-mit-dem-ich-installiert-habe>/.kube
+cat config
+```
+
+
+
+## Kubernetes Workloads
+
+### Welche Wege gibt es Kubernetes Workloads auszurollen
+
+
+  * gitlab ci/cd
+  * github actions
+  * bitbucket + jenkings
+  * ArgoCD
+  * Flux
+  * helm/helmfile
+
+### Grafik 
+
+<img width="1297" height="820" alt="image" src="https://github.com/user-attachments/assets/0593d586-3888-40a4-81a7-5dce1d8af63b" />
+
+## Kubernetes Infrastructure (Performance)
+
+### Performance of etcd for setup
+
+
+```
+etcdctl check perf --load="s"
+(s steht für small: 
+
+https://andreaskaris.github.io/blog/openshift/etcd_perf/
+The performance check's workload model. Accepted workloads: s(small), m(medium), l(large), xl(xLarge)
+
+
+
+
+```
+
 ## Podman
 
 ### Podman vs. Docker
@@ -9203,6 +12116,17 @@ cd my-charts
 helm create my-app
 ``` 
 
+### Aufbau des Charts erkunden 
+
+
+
+### helm template (Das Chart nur rendern) 
+
+```
+helm template my-app
+```
+
+
 ### Install helm - chart 
 
 ```
@@ -9213,12 +12137,14 @@ helm -n my-app-<namenskuerzel> install meine-app my-app --create-namespace
 ```
 ## Variante 2:
 cd my-app
-helm -n my-app-<namenskuerzel> install meine-app . --create-namespace 
+helm -n my-app-<namenskuerzel> install meine-app . --create-namespace
 ```
 
 ```
 kubectl -n my-app-<namenskuerzel> get all
-kubectl -n my-app-<namenskuerzel> get pods 
+kubectl -n my-app-<namenskuerzel> get pods
+helm -n my-app-jochen status meine-app
+
 ```
 
 ### Wie starte ich am besten - Übung
@@ -10326,7 +13252,7 @@ The flannel daemon is started using the arguments in ${SNAP_DATA}/args/flanneld.
 ### Exercise 
 
 ```
-kubectl run podtest --rm -ti --image busybox
+kubectl run podtest --rm -ti --image=busybox
 ```
 
 ### Example with svc-nginx 
@@ -11120,15 +14046,93 @@ kubectl exec -it print-envs-complete -- bash
 
 ## Kubernetes RBAC (Role based access control)
 
+### Überblick, welche Rechte können gesetzt werden
+
+
+### Kubernetes RBAC – Verbs (Berechtigungen)
+
+**Quelle:** [kubernetes.io – RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+
+#### Standard-Verbs (HTTP-äquivalent)
+
+| Verb | Beschreibung |
+|------|-------------|
+| `get` | Einzelne Ressource lesen |
+| `list` | Alle Ressourcen eines Typs auflisten |
+| `watch` | Ressourcen auf Änderungen beobachten |
+| `create` | Neue Ressource erstellen |
+| `update` | Vorhandene Ressource vollständig ersetzen |
+| `patch` | Ressource partiell ändern |
+| `delete` | Einzelne Ressource löschen |
+| `deletecollection` | Mehrere Ressourcen auf einmal löschen |
+
+#### Spezielle Verbs
+
+| Verb | Beschreibung |
+|------|-------------|
+| `impersonate` | Als anderer User/Gruppe/ServiceAccount agieren |
+| `bind` | RoleBindings/ClusterRoleBindings erstellen |
+| `escalate` | Roles mit höheren Rechten bearbeiten als man selbst hat |
+| `use` | PodSecurityPolicies verwenden (deprecated ab k8s 1.25) |
+| `approve` | CertificateSigningRequests genehmigen |
+| `sign` | Zertifikate signieren |
+
+#### Wildcard
+
+```yaml
+verbs: ["*"]  # alle Verbs erlaubt
+```
+
+#### Alle verfügbaren Verbs per Resource anzeigen:
+
+```bash
+kubectl api-resources --sort-by name -o wide
+```
+
+
+### nonResourceURLs in Kubernetes RBAC
+
+**Quelle:** [kubernetes.io – RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+
+Das sind API-Endpunkte, die **keine Kubernetes-Ressourcen** darstellen – also kein `get pods` etc., sondern direkte HTTP-Pfade auf dem API-Server.
+
+#### Häufig verwendete nonResourceURLs
+
+| URL | Beschreibung |
+|-----|-------------|
+| `/healthz` | Health-Check des API-Servers |
+| `/livez` | Liveness-Probe |
+| `/readyz` | Readiness-Probe |
+| `/metrics` | Prometheus-Metriken (z.B. für Prometheus selbst) |
+| `/api` | API-Discovery |
+| `/api/*` | Alle Core-API-Pfade |
+| `/apis` | API-Groups Discovery |
+| `/apis/*` | Alle erweiterten API-Pfade |
+| `/version` | Kubernetes-Version abfragen |
+| `/openapi/v2` | OpenAPI-Schema |
+| `/logs` | Logs des API-Servers |
+| `/swagger-ui/*` | Swagger UI |
+
+#### Erlaubte Verbs für nonResourceURLs
+
+Nur **`get`** – mehr ist nicht möglich.
+
+#### Beispiel
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metrics-reader
+rules:
+- nonResourceURLs: ["/metrics", "/healthz"]
+  verbs: ["get"]
+```
+
+> **Wichtig:** `nonResourceURLs` sind immer **cluster-weit** → nur in `ClusterRole` sinnvoll, nicht in `Role`.
+
 ### RBAC Übung kubectl
 
-
-### Enable RBAC in microk8s 
-
-```
-## This is important, if not enable every user on the system is allowed to do everything 
-microk8s enable rbac 
-```
 
 ### Schritt 1: Nutzer-Account auf Server anlegen und secret anlegen / in Client 
 
@@ -11139,6 +14143,10 @@ cd manifests/rbac
 ```
 
 ####  Mini-Schritt 1: Definition für Nutzer 
+
+```
+nano service-account.yml
+```
 
 ```
 ## vi service-account.yml 
@@ -11160,6 +14168,10 @@ kubectl apply -f service-account.yml
   * https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#create-token
 
 ```
+nano secret.yml
+```
+
+```
 ## vi secret.yml 
 apiVersion: v1
 kind: Secret
@@ -11179,6 +14191,10 @@ kubectl apply -f .
 #### Mini-Schritt 2: ClusterRole festlegen - Dies gilt für alle namespaces, muss aber noch zugewiesen werden
 
 ```
+nano pods-clusterrole.yml
+```
+
+```
 ### Bevor sie zugewiesen ist, funktioniert sie nicht - da sie keinem Nutzer zugewiesen ist 
 
 ## vi pods-clusterrole.yml 
@@ -11196,9 +14212,14 @@ rules:
 kubectl apply -f pods-clusterrole.yml 
 ```
 
-#### Mini-Schritt 3: Die ClusterRolle den entsprechenden Nutzern über RoleBinding zu ordnen 
+#### Mini-Schritt 3: Die ClusterRole den entsprechenden Nutzern über RoleBinding zu ordnen 
+
 ```
-## vi rb-training-ns-default-pods.yml
+nano rolebinding.yml
+```
+
+```
+## vi rolebinding.yml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -11215,7 +14236,7 @@ subjects:
 ```
 
 ```
-kubectl apply -f rb-training-ns-default-pods.yml
+kubectl apply -f rolebinding.yml
 ```
 
 #### Mini-Schritt 4: Testen (klappt der Zugang) 
@@ -11229,7 +14250,7 @@ kubectl auth can-i get pods -n default --as system:serviceaccount:default:traini
 #### Mini-Schritt 1: kubeconfig setzen 
 
 ```
-kubectl config set-context training-ctx --cluster microk8s-cluster --user training
+kubectl config set-context training-ctx --cluster kubernetes --user training
 
 ## extract name of the token from here 
 
@@ -11245,7 +14266,6 @@ kubectl get deploy
 
 #### Mini-Schritt 2:
 ```
-kubectl config use-context training-ctx
 kubectl get pods 
 ```
 
@@ -11256,13 +14276,14 @@ kubectl config get-contexts
 ```
 
 ```
-CURRENT   NAME           CLUSTER            AUTHINFO    NAMESPACE
-          microk8s       microk8s-cluster   admin2
-*         training-ctx   microk8s-cluster   training2
+CURRENT   NAME                            CLUSTER            AUTHINFO    NAMESPACE
+          kubernetes-admin@kubernetes     kubernetes   kubernetes-admin
+*         training-ctx                    kubernetes   training
 ```
 
 ```
-kubectl config use-context microk8s  
+kubectl config use-context kubernetes-admin@kubernetes
+kubectl -n kube-system get pods 
 ```
 
 
@@ -11275,6 +14296,60 @@ kubectl config use-context microk8s
 ### Ref: Create Service Account Token 
 
   * https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#create-token
+
+### ServiceAccount im pod mit kubectl verwenden
+
+
+### Prerequisites 
+
+  * Service-Account mit Rechten muss angelegt sein (für die Verwendung innerhalb des Pods. Eintrag in ServiceAccountName) 
+
+### Walkthrough 
+
+```
+cd 
+mkdir -p manifests/rbac
+cd manifests/rbac
+nano pod.yaml
+```
+
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tools-pod
+spec:
+  serviceAccountName: training<nr>
+  containers:
+  - name: tools
+    image: alpine/k8s:1.35.0
+    command: ["sleep", "infinity"]
+```
+
+```
+kubectl apply -f .
+```
+
+```
+kubectl exec -it tools-pod -- sh
+```
+
+```
+## IN DER BASH 
+## Achtung der pod muss das kommando kubectl drin haben
+## Das geht nicht, weil wir dafür keine Rechte haben 
+kubectl cluster-info
+kubectl get pods
+## aus diesem pod heraus einen anderen Pod starten 
+kubectl run my-nginx --image=nginx:1.23 
+```
+
+### Teardown 
+
+```
+kubectl delete -f pod.yaml
+```
 
 ## Kubernetes Operator Konzept 
 
@@ -13431,7 +16506,10 @@ kubectl cluster-info
 
 ## Welche Ressourcen / Objekte gibt es, z.B. Pod 
 kubectl api-resources 
-kubectl api-resources | grep namespaces 
+kubectl api-resources | grep namespaces
+
+## Zeigt alle api-Gruppen (Landkarten)
+kubectl api-versions
 
 ## Hilfe zu object und eigenschaften bekommen
 kubectl explain pod 
@@ -15731,17 +18809,9 @@ kubectl delete ns policy-demo<tln>
 Ein Paket für alle Komponenten
 Einfaches Installieren, Updaten und deinstallieren
 Konfigurations-Values-Files übergeben zum Konfigurieren
-Feststehende Struktur 
+Feststehende Struktur
+Konkrete Versionen des Charts
 ```
-
-### Was kann helm ?
-
-
-- **Installieren** und **Deinstallieren** von Anwendungen in Kubernetes (`helm install / helm uninstall`)
-- **Upgraden** von bestehenden Installationen (`helm upgrade`)
-- **Rollbacks** durchführen, falls etwas schiefläuft (`helm rollback`)
-- **Anpassen** von Anwendungen durch Konfigurationswerte (`values.yaml`)
-- **Veröffentlichen** eigener Charts (z. B. in einem Helm-Repository)
 
 ### Grundlagen / Aufbau / Verwendung (Dev/Ops)
 
@@ -15779,14 +18849,11 @@ Wenn wir ein Chart installieren, wird eine Release erstellen
 ## Beispiel ubuntu 
 ## snap install --classic helm
 
-## Cluster auf das ich zugreifen kann und im client -> helm und kubectl 
-## Voraussetzung auf dem Client-Rechner (helm ist nichts als anderes als ein Client-Programm) 
-Ein lauffähiges kubectl auf dem lokalen System (welches sich mit dem Cluster verbinden.
--> saubere -> .kube/config 
+## Cluster auf das ich zugreifen kann und im client -> helm (und eine entsprechende .kube/config) 
+## (helm ist nichts als anderes als ein Client-Programm)  
 
 ## Test
 kubectl cluster-info 
-
 ```
 
 
@@ -17042,7 +20109,10 @@ kubectl cluster-info
 
 ## Welche Ressourcen / Objekte gibt es, z.B. Pod 
 kubectl api-resources 
-kubectl api-resources | grep namespaces 
+kubectl api-resources | grep namespaces
+
+## Zeigt alle api-Gruppen (Landkarten)
+kubectl api-versions
 
 ## Hilfe zu object und eigenschaften bekommen
 kubectl explain pod 
